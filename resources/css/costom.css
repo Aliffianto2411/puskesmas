@@ -1,0 +1,42 @@
+.icon-circle {
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: -30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1;
+}
+
+.stat-card {
+    padding-top: 30px;
+    border-radius: 12px;
+    position: relative;
+    background-color: white;
+}
+#tentang-kami h2 {
+    font-size: 2.5rem;
+}
+
+#tentang-kami ul {
+    padding-left: 1.2rem;
+}
+
+.service-box {
+    transition: all 0.3s ease-in-out;
+    background-color: white;
+}
+.service-box:hover {
+    background-color: #0d6efd;
+    color: white;
+}
+.service-box:hover i,
+.service-box:hover h5 {
+    color: white;
+}
