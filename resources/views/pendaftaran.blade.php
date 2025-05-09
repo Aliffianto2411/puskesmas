@@ -4,18 +4,21 @@
 
 @section('content')
 <div class="container py-4">
-  <h2 class="mb-4">Selamat Datang, auth->user()</h2>
+  <h2 class="mb-4">Selamat Datang, {{ auth()->user()->name }}</h2>
 
   <!-- Status Antrian Hari Ini -->
   <div class="card shadow-sm mb-4">
-    <div class="card-body">
-      <h5 class="card-title">Status Antrian Hari Ini</h5>
-      <p class="mb-1">Poli: <strong>Umum</strong></p>
-      <p class="mb-1">Nomor Antrian: <strong>045</strong></p>
-      <p class="mb-1">Status: <span class="badge bg-info">Menunggu 5 pasien</span></p>
-      <p class="mb-0">Estimasi Waktu: <strong>15 menit</strong></p>
+    <div class="card-body position-relative">
+        <h5 class="card-title">Status Antrian Hari Ini</h5>
+        <p class="mb-1">Poli: <strong>Umum</strong></p>
+        <p class="mb-1">Nomor Antrian: <strong>045</strong></p>
+        <p class="mb-1">Status: <span class="badge bg-info">Menunggu 5 pasien</span></p>
+        <p class="mb-0">Estimasi Waktu: <strong>15 menit</strong></p>
+        
+        <!-- Tombol Cek In -->
+        <button class="btn btn-primary position-absolute" style="bottom: 10px; right: 10px;">Cek In</button>
     </div>
-  </div>
+</div>
 
   <!-- Jadwal Dokter Hari Ini -->
   <div class="card shadow-sm mb-4">

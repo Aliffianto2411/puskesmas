@@ -71,14 +71,14 @@
 
   .btn-time:hover,
   .btn-check:checked + .btn-time {
-    background: linear-gradient(45deg, rgb(1, 245, 103), rgb(69, 212, 255));
+    background: linear-gradient(45deg, rgb(4, 103, 184), rgb(0, 255, 149));
     color: white;
     border-color: transparent;
   }
 
   .btn-time.disabled {
-    background-color: #d3d3d3 !important;
-    color: #808080;
+    background-color: #d3d3d3 !important; /* Warna abu-abu */
+    color: #808080; /* Warna teks abu-abu */
     border-color: #d3d3d3;
     pointer-events: none; /* Menonaktifkan interaksi */
   }
@@ -89,13 +89,17 @@
     const poliSelect = document.getElementById('poli');
     const tanggalInput = document.getElementById('tanggal');
     const jamSlots = document.getElementById('jam-slot');
+    const jamSlotContainer = jamSlots.closest('.mb-3'); // Mengambil container card jam
+
+    // Sembunyikan card jam saat halaman dimuat
+    jamSlotContainer.style.display = 'none';
 
     // Fungsi untuk mendapatkan slot yang sudah diambil dari server
     function fetchTakenSlots(poli, tanggal) {
       return fetch(`/appointments/${poli}/${tanggal}`)
         .then(response => response.json())
         .then(data => {
-          return data;
+          return data; // Mengembalikan array slot waktu yang sudah diambil
         })
         .catch(error => {
           console.error('Error fetching taken slots:', error);
@@ -109,6 +113,9 @@
       const selectedPoli = poliSelect.value;
 
       if (selectedDate && selectedPoli) {
+        // Tampilkan card jam
+        jamSlotContainer.style.display = 'block';
+
         // Ambil slot yang sudah terambil dari server
         const takenTimes = await fetchTakenSlots(selectedPoli, selectedDate);
         
@@ -116,18 +123,21 @@
         const allSlots = jamSlots.querySelectorAll('.btn-check');
         allSlots.forEach(slot => {
           const slotTime = slot.value;
+          const label = slot.nextElementSibling;
+
           if (takenTimes.includes(slotTime)) {
             // Nonaktifkan slot yang sudah terambil
             slot.disabled = true;
-            const label = slot.nextElementSibling;
-            label.classList.add('disabled'); // Styling disabled
+            label.classList.add('disabled'); // Tambahkan styling disabled
           } else {
             // Aktifkan slot yang belum terambil
             slot.disabled = false;
-            const label = slot.nextElementSibling;
             label.classList.remove('disabled');
           }
         });
+      } else {
+        // Sembunyikan card jam jika tanggal atau poli belum dipilih
+        jamSlotContainer.style.display = 'none';
       }
     }
 

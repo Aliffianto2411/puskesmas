@@ -11,7 +11,7 @@
         <h1 class="display-4 fw-bold">Selamat Datang di Puskesmas Meral</h1>
         <p class="lead">Menjadi  Puskemas yang unggul untuk Mewujudkan Masyarakat sehat  yang Mandiri dan Berkeadilan</p>
         <a href="{{ url('/login') }}" class="btn btn-light btn-lg text-success">
-          Buat Janji Temu
+         Buat Janji Temu
         </a>
       </div>
       <!-- Kanan: Gambar -->
@@ -60,7 +60,7 @@
 
   <section class="py-5 bg-light" id="tentang-kami" style="padding-top: 100px;">
   <div class="container">
-    <!-- Judul Section -->
+    <div class="container">
     <div class="text-center mb-5">
       <h2 class="fw-bold text-success">Tentang Kami</h2>
       <p class="text-muted">Mengenal lebih dekat Puskesmas Meral</p>
@@ -101,10 +101,10 @@
 </section>
 
 <section id="layanan" class="py-5">
-  <div class="container text-center">
+<div class="container text-center">
     <h2 class="fw-bold mb-3">Layanan Kesehatan</h2>
     <p class="text-muted mb-5">Berbagai layanan kesehatan yang tersedia di Puskesmas Meral</p>
-    <div class="row g-8 ;">
+    <div class="row g-8">s
       <!-- Layanan 1 -->
       <div class="col-md-4">
         <div class="service-box p-4 border rounded-3 h-100">

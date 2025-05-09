@@ -69,7 +69,8 @@ class AuthController extends Controller
             'email' => $request->email,
             'email_verified_at' => Carbon::now(),
             
-        ]);
+        ])
+        ->assignRole('user');
 
         $login = [
             'email'     => $request->email,

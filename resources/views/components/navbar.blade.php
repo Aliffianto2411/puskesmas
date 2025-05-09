@@ -10,22 +10,22 @@
 
     <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
     <ul class="navbar-nav">
-    {{-- Beranda --}}
+  
     <li class="nav-item">
         <a class="nav-link" href="{{ url('/') }}">Beranda</a>
     </li>
 
-    {{-- Tentang Kami (section di homepage) --}}
+   
     <li class="nav-item">
         <a class="nav-link" href="{{ url('/#tentang-kami') }}">Tentang Kami</a>
     </li>
 
-    {{-- Pelayanan (section di homepage) --}}
+    
     <li class="nav-item">
         <a class="nav-link" href="{{ url('/#layanan') }}">Pelayanan</a>
     </li>
 
-    {{-- Antrian (halaman terpisah) --}}
+
     <li class="nav-item">
         <a class="nav-link" href="{{ url('/antrian') }}">Antrian</a>
     </li>
@@ -34,7 +34,8 @@
     </div>
 
     <div class="d-flex">
-      <a href="/login" class="btn btn-success">Registrasi Janji Temu</a>
+      <a href="/login" class="btn btn-success">Masuk</a>
     </div>
   </div>
 </nav>
+

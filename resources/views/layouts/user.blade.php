@@ -8,14 +8,25 @@
   <!-- Bootstrap CSS & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    /* Main content area to avoid being overlapped by fixed sidebar */
+    .main-content {
+      margin-left: 250px; /* Sama dengan lebar sidebar */
+      padding: 20px;
+      background-color: #f8f9fa;
+      min-height: 100vh;
+    }
+  </style>
 </head>
 <body>
-  <div class="d-flex">
-    <x-sidebar />
 
-    <div class="flex-grow-1 p-4" style="background-color: #f8f9fa; min-height: 100vh;">
-      @yield('content')
-    </div>
+  <!-- Sidebar Component -->
+  <x-sidebar />
+
+  <!-- Main Content -->
+  <div class="main-content">
+    @yield('content')
   </div>
 
   <!-- Bootstrap JS -->
