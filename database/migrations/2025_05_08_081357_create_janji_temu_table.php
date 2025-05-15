@@ -14,13 +14,13 @@ class CreateJanjiTemuTable extends Migration
     public function up()
     {
         Schema::create('janji_temu', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Menghubungkan dengan tabel users
-            $table->string('poli');
-            $table->date('tanggal');
-            $table->time('jam');
-            $table->timestamps();
-        });
+        $table->id();
+        $table->foreignId('user_id');
+        $table->foreignId('poli_id');
+        $table->date('tanggal');
+        $table->time('jam');
+        $table->timestamps();
+    });
     }
 
     /**

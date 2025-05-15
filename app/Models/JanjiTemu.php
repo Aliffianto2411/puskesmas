@@ -2,24 +2,21 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class JanjiTemu extends Model
 {
-    use HasFactory;
-
-    protected $table = 'janji_temu'; // Nama tabel di database
+    protected $table = 'janji_temu'; // sesuaikan nama tabel
 
     protected $fillable = [
         'user_id',
-        'poli',
+        'poli_id',   // pakai poli_id supaya relasi ke tabel polis
         'tanggal',
         'jam',
     ];
 
-    public function user()
+    public function poli()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Poli::class, 'poli_id'); // relasi ke tabel poli
     }
 }

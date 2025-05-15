@@ -18,11 +18,6 @@ Route::post('/register-proses', [AuthController::class, 'register_proses'])->nam
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/appoitment', [JanjiTemuController::class, 'index'])->name('appoitment');
-    Route::post('/janji-temu', [JanjiTemuController::class, 'store'])->name('appoitment.store');
-    Route::get('/appointments/{poli}/{tanggal}', [JanjiTemuController::class, 'getTakenSlots']);
-});
 
 Route::get('/antrian', function () {
     return view('antrian');
@@ -43,3 +38,18 @@ route::get('/profile', function () {
 route::get('/pasiencall', function () {
     return view('pasiencall');
 });
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/appointment', [JanjiTemuController::class, 'index'])->name('appointment.index');
+    Route::post('/appointment', [JanjiTemuController::class, 'store'])->name('appointment.store');
+
+    // API route
+    Route::get('/appointments/{poli}/{tanggal}', [JanjiTemuController::class, 'getTakenSlots']);
+});
+
+
+
+Route::post('/janji-temu', [JanjiTemuController::class, 'store'])->name('janji-temu.store');
+
+

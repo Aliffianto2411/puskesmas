@@ -11,18 +11,23 @@
           <h5 class="mb-0">Form Janji Temu</h5>
         </div>
         <div class="card-body">
-          <form action="{{ route('appoitment.store') }}" method="POST">
-            @csrf
-            <div class="mb-3">
-              <label for="poli" class="form-label">Pilih Poli</label>
-              <select class="form-select" id="poli" name="poli" required>
-                <option selected disabled>-- Pilih Poli --</option>
-                <option value="umum">Poli Umum</option>
-                <option value="gigi">Poli Gigi</option>
-                <option value="kia">Poli KIA</option>
-                <option value="vaksin">Poli Vaksin</option>
-              </select>
-            </div>
+            @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      {{ session('success') }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  @endif
+          <form action="{{ route('appointment.store') }}" method="POST">
+          @csrf
+          <div class="mb-3">
+            <label for="poli" class="form-label">Pilih Poli</label>
+            <select class="form-select" id="poli" name="poli_id" required>
+              <option selected disabled>-- Pilih Poli --</option>
+              @foreach($poli as $poli)
+                <option value="{{ $poli->id }}">{{ $poli->nama_poli }}</option>
+              @endforeach
+            </select>
+          </div>
 
             <!-- Tanggal -->
             <div class="mb-3">
