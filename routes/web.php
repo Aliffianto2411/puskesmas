@@ -1,8 +1,13 @@
 <?php
 
+use App\Http\Controllers\AnggotaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PasienController;
+use App\Http\Controllers\KeluargaController;
 use App\Http\Controllers\JanjiTemuController;
+// Ensure the controller exists at app/Http/Controllers/DetailKeluargaController.php
+use App\Http\Controllers\DetailKeluargaController;
 
 
 Route::get('/', function () {
@@ -23,21 +28,22 @@ Route::get('/antrian', function () {
     return view('antrian');
 });
 
-Route::get('/pendaftaran', function () {
-    return view('pendaftaran');
-});
+
 
 Route::get('/riwayat', function () {
     return view('riwayat');
 });
 
-route::get('/profile', function () {
-    return view('profile');
-});
+// route::get('/profile', function () {
+//     return view('profile');
+// });
+
 
 route::get('/pasiencall', function () {
     return view('pasiencall');
 });
+
+// route::resource('/pasien', PasienController::class);
 
 
 Route::middleware(['auth'])->group(function () {
@@ -46,10 +52,49 @@ Route::middleware(['auth'])->group(function () {
 
     // API route
     Route::get('/appointments/{poli}/{tanggal}', [JanjiTemuController::class, 'getTakenSlots']);
+    Route::get('/pendaftaran', function () { return view('pendaftaran');});
+
+
+    //profile
+    Route::get('/profile', [PasienController::class, 'index'])->name('profile.index');
+    Route::get('/profile/edit/{id}', [PasienController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/{pasien}',[PasienController::class, 'update'])->name('profile.update');
+
+    // Keluarga
+
+    /* ---- KARTU KELUARGA (1 user : 1 KK) ---- */
+
+    // tampilkan KK & seluruh anggotanya
+    Route::get('/keluarga',              [KeluargaController::class, 'show'])
+        ->name('keluarga.show');
+
+    // buat KK pertama kali
+    Route::post('/keluarga',             [KeluargaController::class, 'store'])
+        ->name('keluarga.store');
+
+    // ubah No KK
+    Route::put('/keluarga',              [KeluargaController::class, 'update'])
+        ->name('keluarga.update');
+
+
+    /* ---- ANGGOTA KELUARGA ---- */
+
+    // tambah anggota ke KK milik user
+    Route::post('/anggota',              [AnggotaController::class, 'store'])
+        ->name('anggota.store');
+
+    // form edit anggota
+    Route::get('/anggota/{anggota}/edit',[AnggotaController::class, 'edit'])
+        ->name('anggota.edit');
+
+    // update data anggota
+    Route::put('/anggota/{anggota}',     [AnggotaController::class, 'update'])
+        ->name('anggota.update');
+
+    // hapus anggota
+    Route::delete('/anggota/{anggota}',  [AnggotaController::class, 'destroy'])
+        ->name('anggota.destroy');
+
+     Route::post('/janji-temu', [JanjiTemuController::class, 'store'])->name('janji-temu.store');
 });
-
-
-
-Route::post('/janji-temu', [JanjiTemuController::class, 'store'])->name('janji-temu.store');
-
 

@@ -13,6 +13,9 @@ class JanjiTemu extends Model
         'poli_id',   // pakai poli_id supaya relasi ke tabel polis
         'tanggal',
         'jam',
+        'nomor_antrian',
+        'created_at',
+        'updated_at',
     ];
 
     public function poli()

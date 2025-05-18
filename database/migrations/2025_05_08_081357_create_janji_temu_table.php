@@ -19,6 +19,7 @@ class CreateJanjiTemuTable extends Migration
         $table->foreignId('poli_id');
         $table->date('tanggal');
         $table->time('jam');
+        $table->string('nomor_antrian')->unique();
         $table->timestamps();
     });
     }

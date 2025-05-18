@@ -15,8 +15,8 @@ class PasienSeeder extends Seeder
     {
         Pasien::insert([
             'nama' => 'Ahmad Fauzi',
-            'nik' => '1234567890123456',
-            'jenis_kelamin' => 'laki-laki',
+            'nik' => '123456789012345',
+            'jenis_kelamin' => Pasien::jenis_kelamin['Laki-laki'],
             'tanggal_lahir' => '2000-01-01',
             'alamat' => 'Jl. Merdeka No.1',
             'no_hp' => '08123456789',
