@@ -11,11 +11,11 @@ class KeluargaController extends Controller
     public function show(Request $request)
     {
         $keluarga = $request->user()
-            ->keluarga()           
-            ->with('anggota')      
-            ->first();
+                ->keluarga()      // relasi one-to-one User→Keluarga
+                ->with('anggota') // relasi hasMany di atas
+                ->first();
 
-        return view('keluarga.show', compact('keluarga'));
+    return view('keluarga.show', compact('keluarga'));
     }
 
     
@@ -41,7 +41,7 @@ class KeluargaController extends Controller
     {
         $data = $request->validate([
             'no_kk' => 'required|digits:16|unique:keluargas,no_kk,' .
-                       $request->user()->keluarga->id,
+            $request->user()->keluarga->id,
         ]);
 
         $request->user()->keluarga->update($data);

@@ -4,12 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\DetailKeluarga;
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class AnggotaController extends Controller
 {
-    use AuthorizesRequests;
-    // Tambah anggota
+
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -27,7 +25,15 @@ class AnggotaController extends Controller
             return back()->withErrors('Buat KK terlebih dahulu.');
         }
 
-        $keluarga->anggota()->create($data);
+        $keluarga->anggota()->create([
+            'nama'           => $data['nama'],
+            'nik'            => $data['nik'],
+            'jenis_kelamin'  => $data['jenis_kelamin'],
+            'tanggal_lahir'  => $data['tanggal_lahir'],
+            'alamat'         => $data['alamat'],
+            'golongan_darah' => $data['golongan_darah'],
+            'created_at'   => now(),
+        ])->save();
 
         return back()->with('success', 'Anggota ditambahkan.');
     }
@@ -35,14 +41,11 @@ class AnggotaController extends Controller
     // Form edit (opsional)
     public function edit(DetailKeluarga $anggota)
     {
-        $this->authorize('update', $anggota); // pakai policy bila perlu
-        return view('anggota.edit', compact('anggota'));
+        return view('keluarga.edit', compact('anggota'));
     }
 
-    // Update anggota
     public function update(Request $request, DetailKeluarga $anggota)
     {
-        $this->authorize('update', $anggota);
 
         $data = $request->validate([
             'nama'           => 'required|string|max:100',
@@ -58,12 +61,11 @@ class AnggotaController extends Controller
         return back()->with('success', 'Data anggota diperbarui.');
     }
 
-    // Hapus anggota
     public function destroy(DetailKeluarga $anggota)
     {
-        $this->authorize('delete', $anggota);
         $anggota->delete();
 
         return back()->with('success', 'Anggota dihapus.');
     }
+
 }

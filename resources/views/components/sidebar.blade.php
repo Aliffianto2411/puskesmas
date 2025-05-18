@@ -14,7 +14,7 @@
   <hr>
   <div class="dropdown">
     <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-      <strong>User</strong>
+      <strong>{{ auth()->user()->name}}</strong>
     </a>
     <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser">
       <li><a class="dropdown-item" href="{{ url('/user/profile') }}">Profil</a></li>

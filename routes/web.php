@@ -34,16 +34,10 @@ Route::get('/riwayat', function () {
     return view('riwayat');
 });
 
-// route::get('/profile', function () {
-//     return view('profile');
-// });
-
 
 route::get('/pasiencall', function () {
     return view('pasiencall');
 });
-
-// route::resource('/pasien', PasienController::class);
 
 
 Route::middleware(['auth'])->group(function () {
@@ -64,37 +58,23 @@ Route::middleware(['auth'])->group(function () {
 
     /* ---- KARTU KELUARGA (1 user : 1 KK) ---- */
 
-    // tampilkan KK & seluruh anggotanya
-    Route::get('/keluarga',              [KeluargaController::class, 'show'])
-        ->name('keluarga.show');
+    Route::get('/keluarga',[KeluargaController::class, 'show'])->name('keluarga.show');
 
-    // buat KK pertama kali
-    Route::post('/keluarga',             [KeluargaController::class, 'store'])
-        ->name('keluarga.store');
+    Route::post('/keluarga',[KeluargaController::class, 'store'])->name('keluarga.store');
 
-    // ubah No KK
-    Route::put('/keluarga',              [KeluargaController::class, 'update'])
-        ->name('keluarga.update');
+    Route::put('/keluarga',[KeluargaController::class, 'update'])->name('keluarga.update');
 
 
-    /* ---- ANGGOTA KELUARGA ---- */
+    //amggota keluarga
+    Route::post('/anggota',[AnggotaController::class, 'store'])->name('anggota.store');
 
-    // tambah anggota ke KK milik user
-    Route::post('/anggota',              [AnggotaController::class, 'store'])
-        ->name('anggota.store');
+    Route::get('/anggota/{anggota}/edit',[AnggotaController::class, 'edit'])->name('anggota.edit');
 
-    // form edit anggota
-    Route::get('/anggota/{anggota}/edit',[AnggotaController::class, 'edit'])
-        ->name('anggota.edit');
+    Route::put('/anggota/{anggota}',[AnggotaController::class, 'update'])->name('anggota.update');
 
-    // update data anggota
-    Route::put('/anggota/{anggota}',     [AnggotaController::class, 'update'])
-        ->name('anggota.update');
-
-    // hapus anggota
-    Route::delete('/anggota/{anggota}',  [AnggotaController::class, 'destroy'])
-        ->name('anggota.destroy');
+    Route::delete('/anggota/{anggota}',  [AnggotaController::class, 'destroy'])->name('anggota.destroy');
 
      Route::post('/janji-temu', [JanjiTemuController::class, 'store'])->name('janji-temu.store');
+
 });
 
