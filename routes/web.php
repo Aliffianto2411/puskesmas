@@ -8,7 +8,7 @@ use App\Http\Controllers\KeluargaController;
 use App\Http\Controllers\JanjiTemuController;
 // Ensure the controller exists at app/Http/Controllers/DetailKeluargaController.php
 use App\Http\Controllers\DetailKeluargaController;
-
+use App\Http\Controllers\RiwayatAntrianController;
 
 Route::get('/', function () {
     return view('home'); 
@@ -22,17 +22,6 @@ Route::post('/register-proses', [AuthController::class, 'register_proses'])->nam
 
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-
-
-Route::get('/antrian', function () {
-    return view('antrian');
-});
-
-
-
-Route::get('/riwayat', function () {
-    return view('riwayat');
-});
 
 
 route::get('/pasiencall', function () {
@@ -75,6 +64,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/anggota/{anggota}',  [AnggotaController::class, 'destroy'])->name('anggota.destroy');
 
      Route::post('/janji-temu', [JanjiTemuController::class, 'store'])->name('janji-temu.store');
+
+     // riwayat
+    Route::get('/riwayat', [RiwayatAntrianController::class, 'index'])->name('riwayat.index');
 
 });
 

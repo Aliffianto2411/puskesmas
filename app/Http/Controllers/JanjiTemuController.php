@@ -55,6 +55,7 @@ class JanjiTemuController extends Controller
                 'tanggal' => $request->tanggal,
                 'jam' => $request->jam,
                 'nomor_antrian' => $nomorAntrian,
+                'status' => JanjiTemu::STATUS['Menunggu'],
                 'created_at' => now(),
                 'updated_at' => null,
             ]);
