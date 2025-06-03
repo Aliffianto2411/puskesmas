@@ -23,17 +23,26 @@
               <p><strong>Poli:</strong> {{ $invoice->poli->nama_poli ?? '-' }}</p>
               <p><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($invoice->tanggal)->format('d-m-Y') }}</p>
               <p><strong>Jam:</strong> {{ $invoice->jam }}</p>
-
-              @if($invoice->status == 'Menunggu')
-                <form action="{{ route('appointment.checkin', $invoice->id) }}" method="POST" class="d-inline">
-                  @csrf
-                  <button type="submit" class="btn btn-success btn-sm">Check-In</button>
-                </form>
-                <form action="{{ route('appointment.cancel', $invoice->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin membatalkan janji temu ini?');">
-                  @csrf
-                  <button type="submit" class="btn btn-danger btn-sm">Batal</button>
-                </form>
-              @endif
+                @switch($invoice->status)
+                  @case('Menunggu')
+                    @php $badgeClass = 'bg-warning text-dark'; @endphp
+                    @break
+                  @case('Batal')
+                    @php $badgeClass = 'bg-danger'; @endphp
+                    @break
+                  @case('Diterima')
+                    @php $badgeClass = 'bg-success'; @endphp
+                    @break
+                  @default
+                    @php $badgeClass = 'bg-secondary'; @endphp
+                @endswitch
+                <p>
+                  <strong>Status:</strong>
+                  <span class="badge {{ $badgeClass }}">
+                    {{ $invoice->status ?? 'Menunggu' }}
+                  </span>
+                </p>
+                </p>
             </div>
           </div>
         @endforeach
@@ -106,20 +115,26 @@
   </div>
 
   <!-- Pengumuman -->
-  <div class="card shadow-sm">
-    <div class="card-body">
-      <h5 class="card-title">Pengumuman</h5>
-      <ul class="list-group">
-        <li class="list-group-item">
-          <strong>Libur Nasional</strong><br>
-          <small>Puskesmas tutup pada tanggal 10 Mei 2025.</small>
-        </li>
-        <li class="list-group-item">
-          <strong>Perubahan Jadwal Poli Gigi</strong><br>
-          <small>Jam praktik berubah menjadi pukul 10.00 - 13.00 mulai minggu depan.</small>
-        </li>
-      </ul>
-    </div>
+ <div class="card shadow-sm">
+  <div class="card-body">
+    <h5 class="card-title">Pengumuman</h5>
+    <ul class="list-group">
+      @if($pengumuman->isNotEmpty())
+        @foreach($pengumuman as $p)
+          <li class="list-group-item">
+            <h6>{{ $p->judul }}</h6>
+            <p>{{ Str::limit($p->isi, 100) }}</p>
+            <small class="text-muted">
+              {{ \Carbon\Carbon::parse($p->tanggal_pengumuman)->translatedFormat('d F Y') }} - 
+              {{ \Carbon\Carbon::parse($p->tanggal_berakhir)->translatedFormat('d F Y') }}
+            </small>
+          </li>
+        @endforeach
+      @else
+        <li class="list-group-item">Tidak ada pengumuman saat ini.</li>
+      @endif
+    </ul>
   </div>
 </div>
+
 @endsection

@@ -2,15 +2,17 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PoliController;
 use App\Http\Controllers\PasienController;
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\KeluargaController;
-use App\Http\Controllers\JanjiTemuController;
 // Ensure the controller exists at app/Http/Controllers/DetailKeluargaController.php
+use App\Http\Controllers\JanjiTemuController;
+use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\DetailKeluargaController;
 use App\Http\Controllers\RiwayatAntrianController;
-use App\Http\Controllers\PoliController;
+use App\Models\Pengumuman;
 
 Route::get('/', function () {
     return view('home'); 
@@ -78,7 +80,15 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran');
 
-Route::resource('poli', PoliController::class);
+    Route::resource('poli', PoliController::class);
+
+    Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('pengumuman.index');
+    Route::get('/pengumuman/{id}', [PengumumanController::class, 'show'])->name('pengumuman.show');
+    Route::post('/pengumuman', [PengumumanController::class, 'store'])->name('pengumuman.store');
+    Route::get('/pengumuman/create', [PengumumanController::class, 'create'])->name('pengumuman.create');
+    Route::get('/pengumuman/{id}/edit', [PengumumanController::class, 'edit'])->name('pengumuman.edit');
+    Route::put('/pengumuman/{id}', [PengumumanController::class, 'update'])->name('pengumuman.update');
+    Route::delete('/pengumuman/{id}', [PengumumanController::class, 'destroy'])->name('pengumuman.destroy');
 
 });
 

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Pengumuman;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Database\Seeders\PasienSeeder;
@@ -17,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call([UsersSeeder::class]);
         $this->call([PoliSeeder::class]);
         $this->call([PasienSeeder::class]);
+        $this->call([PengumumanSeeder::class]);
     }
     
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\JanjiTemu;
+use App\Models\Pengumuman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,6 +19,7 @@ class PendaftaranController extends Controller
             ->orderBy('tanggal', 'asc')
             ->orderBy('jam', 'asc')
             ->get();
+        $pengumuman = Pengumuman::orderBy('tanggal_pengumuman', 'desc')->get();
 
         $jadwalDokter = [
             ['poli' => 'Umum', 'dokter' => 'dr. Fitriani', 'jam' => '08:00 - 12:00'],
@@ -29,6 +31,6 @@ class PendaftaranController extends Controller
             ['tanggal' => '05 Mei 2025', 'poli' => 'Gigi', 'nomor' => '019', 'status' => 'Batal'],
         ];
 
-        return view('pendaftaran', compact('activeInvoices', 'jadwalDokter', 'riwayatAntrian'));
+        return view('pendaftaran', compact('activeInvoices', 'jadwalDokter', 'riwayatAntrian','pengumuman'));
     }
 }
