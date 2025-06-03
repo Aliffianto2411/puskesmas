@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('poli', function (Blueprint $table) {
             $table->id();
             $table->string('nama_poli')->unique();
+            $table->string('kode_poli');
             $table->timestamps();
         });
     }

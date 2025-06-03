@@ -4,21 +4,45 @@
 
 @section('content')
 <div class="container py-4">
+
   <h2 class="mb-4">Selamat Datang, {{ auth()->user()->name }}</h2>
 
-  <!-- Status Antrian Hari Ini -->
+  <!-- Invoice Janji Temu Aktif -->
   <div class="card shadow-sm mb-4">
-    <div class="card-body position-relative">
-        <h5 class="card-title">Status Antrian Hari Ini</h5>
-        <p class="mb-1">Poli: <strong>Umum</strong></p>
-        <p class="mb-1">Nomor Antrian: <strong>045</strong></p>
-        <p class="mb-1">Status: <span class="badge bg-info">Menunggu 5 pasien</span></p>
-        <p class="mb-0">Estimasi Waktu: <strong>15 menit</strong></p>
-        
-        <!-- Tombol Cek In -->
-        <button class="btn btn-primary position-absolute" style="bottom: 10px; right: 10px;">Cek In</button>
+    <div class="card-body">
+      <h5 class="card-title">Invoice Janji Temu Aktif</h5>
+
+      @if($activeInvoices->count() > 0)
+        @foreach($activeInvoices as $invoice)
+          <div class="card mb-3 border-success shadow-sm">
+            <div class="card-header bg-success text-white">
+              Nomor Antrian: {{ $invoice->nomor_antrian }} ({{ $invoice->status }})
+            </div>
+            <div class="card-body">
+              <p><strong>Pasien:</strong> {{ $invoice->detailKeluarga->nama ?? '-' }}</p>
+              <p><strong>Poli:</strong> {{ $invoice->poli->nama_poli ?? '-' }}</p>
+              <p><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($invoice->tanggal)->format('d-m-Y') }}</p>
+              <p><strong>Jam:</strong> {{ $invoice->jam }}</p>
+
+              @if($invoice->status == 'Menunggu')
+                <form action="{{ route('appointment.checkin', $invoice->id) }}" method="POST" class="d-inline">
+                  @csrf
+                  <button type="submit" class="btn btn-success btn-sm">Check-In</button>
+                </form>
+                <form action="{{ route('appointment.cancel', $invoice->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin membatalkan janji temu ini?');">
+                  @csrf
+                  <button type="submit" class="btn btn-danger btn-sm">Batal</button>
+                </form>
+              @endif
+            </div>
+          </div>
+        @endforeach
+      @else
+        <p>Tidak ada invoice janji temu aktif.</p>
+      @endif
     </div>
-</div>
+  </div>
+
 
   <!-- Jadwal Dokter Hari Ini -->
   <div class="card shadow-sm mb-4">
@@ -33,16 +57,13 @@
           </tr>
         </thead>
         <tbody>
+          @foreach($jadwalDokter as $jadwal)
           <tr>
-            <td>Umum</td>
-            <td>dr. Fitriani</td>
-            <td>08:00 - 12:00</td>
+            <td>{{ $jadwal['poli'] }}</td>
+            <td>{{ $jadwal['dokter'] }}</td>
+            <td>{{ $jadwal['jam'] }}</td>
           </tr>
-          <tr>
-            <td>Gigi</td>
-            <td>drg. Andika</td>
-            <td>09:00 - 13:00</td>
-          </tr>
+          @endforeach
         </tbody>
       </table>
     </div>
@@ -62,18 +83,23 @@
           </tr>
         </thead>
         <tbody>
+          @foreach($riwayatAntrian as $riwayat)
           <tr>
-            <td>07 Mei 2025</td>
-            <td>Umum</td>
-            <td>032</td>
-            <td><span class="badge bg-success">Selesai</span></td>
+            <td>{{ $riwayat['tanggal'] }}</td>
+            <td>{{ $riwayat['poli'] }}</td>
+            <td>{{ $riwayat['nomor'] }}</td>
+            <td>
+              @php
+                $statusClass = match($riwayat['status']) {
+                  'Selesai' => 'bg-success',
+                  'Batal' => 'bg-danger',
+                  default => 'bg-secondary'
+                };
+              @endphp
+              <span class="badge {{ $statusClass }}">{{ $riwayat['status'] }}</span>
+            </td>
           </tr>
-          <tr>
-            <td>05 Mei 2025</td>
-            <td>Gigi</td>
-            <td>019</td>
-            <td><span class="badge bg-danger">Batal</span></td>
-          </tr>
+          @endforeach
         </tbody>
       </table>
     </div>

@@ -10,6 +10,8 @@
     <li><a href="{{ route('appointment.index') }}" class="nav-link text-white"><i class="bi bi-calendar-check me-2"></i> Janji Temu</a></li>
     <li><a href="{{ url('/riwayat') }}" class="nav-link text-white"><i class="bi bi-clock-history me-2"></i> Riwayat</a></li>
     <li><a href="{{ url('/profile') }}" class="nav-link text-white"><i class="bi bi-person me-2"></i> Profil</a></li>
+    <li><a href="{{ url('/keluarga') }}" class="nav-link text-white"><i class="bi bi-people-fill me-2"></i> keluarga</a></li>
+    <li><a href="{{ url('/poli') }}" class="nav-link text-white"><i class="bi bi-hospital"></i> poli</a></li>
   </ul>
   <hr>
   <div class="dropdown">

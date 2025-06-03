@@ -10,17 +10,18 @@
         <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
 
-    <h2 class="mb-4">Riwayat Antrian</h2>
+    <h2 class="mb-4">Riwayat Pendaftaran Poli</h2>
 
     <div class="card shadow-sm">
         <div class="card-body">
-            <h5 class="card-title">Riwayat Antrian Anda</h5>
+            <h5 class="card-title">Riwayat Pendaftaran Anda</h5>
 
             @if($riwayat->count() > 0)
                 <table class="table table-bordered table-hover">
                     <thead class="table-light">
                         <tr>
                             <th>Tanggal</th>
+                            <th>Anggota Keluarga</th>
                             <th>Poli</th>
                             <th>Nomor Antrian</th>
                             <th>Status</th>
@@ -30,16 +31,30 @@
                         @foreach($riwayat as $antrian)
                             <tr>
                                 <td>{{ \Carbon\Carbon::parse($antrian->tanggal)->format('d M Y') }}</td>
-                                <td>{{ $antrian->poli->nama_poli }}</td>
+                                <td>{{ $antrian->detailKeluarga->nama ?? '-' }}</td>
+                                <td>{{ $antrian->poli->nama_poli ?? '-' }}</td>
                                 <td>{{ $antrian->nomor_antrian }}</td>
                                 <td>
-                                    @if($antrian->status == 'selesai')
-                                        <span class="badge bg-success">Selesai</span>
-                                    @elseif($antrian->status == 'batal')
-                                        <span class="badge bg-danger">Batal</span>
-                                    @else($antrian->status == 'menunggu')
-                                        <span class="badge bg-warning text-dark">Menunggu</span>
-                                    @endif
+                                    @php
+                                        $status = strtolower($antrian->status);
+                                    @endphp
+
+                                    @switch($status)
+                                        @case('selesai')
+                                            <span class="badge bg-success">Selesai</span>
+                                            @break
+                                        @case('batal')
+                                            <span class="badge bg-danger">Batal</span>
+                                            @break
+                                        @case('diterima')
+                                            <span class="badge bg-primary">Diterima</span>
+                                            @break
+                                        @case('menunggu')
+                                            <span class="badge bg-warning text-dark">Menunggu</span>
+                                            @break
+                                        @default
+                                            <span class="badge bg-danger">Dibatalkan</span>
+                                    @endswitch
                                 </td>
                             </tr>
                         @endforeach

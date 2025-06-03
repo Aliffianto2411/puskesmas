@@ -1,14 +1,16 @@
 <?php
 
-use App\Http\Controllers\AnggotaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PasienController;
+use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\KeluargaController;
 use App\Http\Controllers\JanjiTemuController;
 // Ensure the controller exists at app/Http/Controllers/DetailKeluargaController.php
+use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\DetailKeluargaController;
 use App\Http\Controllers\RiwayatAntrianController;
+use App\Http\Controllers\PoliController;
 
 Route::get('/', function () {
     return view('home'); 
@@ -67,6 +69,16 @@ Route::middleware(['auth'])->group(function () {
 
      // riwayat
     Route::get('/riwayat', [RiwayatAntrianController::class, 'index'])->name('riwayat.index');
+    
+    Route::post('/appointment/checkin/{id}', [JanjiTemuController::class, 'checkin'])->name('appointment.checkin');
+    Route::post('/appointment/cancel/{id}', [JanjiTemuController::class, 'cancel'])->name('appointment.cancel');
+
+    Route::get('/appointment/invoice/{id}', [JanjiTemuController::class, 'invoice'])->name('appointment.invoice');
+
+    
+    Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran');
+
+Route::resource('poli', PoliController::class);
 
 });
 

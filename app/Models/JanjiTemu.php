@@ -17,6 +17,7 @@ class JanjiTemu extends Model
 
     protected $fillable = [
         'user_id',
+        'detail_keluarga_id', // foreign key ke detail_keluarga
         'poli_id',   // pakai poli_id supaya relasi ke tabel polis
         'tanggal',
         'jam',
@@ -29,5 +30,15 @@ class JanjiTemu extends Model
     public function poli()
     {
         return $this->belongsTo(Poli::class, 'poli_id'); 
+    }
+
+    public function detailKeluarga()
+    {
+        return $this->belongsTo(DetailKeluarga::class, 'detail_keluarga_id');
+    }
+    
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

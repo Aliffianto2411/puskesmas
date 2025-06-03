@@ -11,35 +11,46 @@
           <h5 class="mb-0">Form Janji Temu</h5>
         </div>
         <div class="card-body">
-        @if ($errors->any())
-          <div class="alert alert-danger">
-            <ul class="mb-0">
-              @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-              @endforeach
-            </ul>
-          </div>
-        @endif
+          @if ($errors->any())
+            <div class="alert alert-danger">
+              <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                  <li>{{ $error }}</li>
+                @endforeach
+              </ul>
+            </div>
+          @endif
 
-        @if (session('error'))
-          <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        @endif
+          @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              {{ session('error') }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          @endif
+
           <form action="{{ route('appointment.store') }}" method="POST">
-          @csrf
-          <div class="mb-3">
-            <label for="poli" class="form-label">Pilih Poli</label>
-            <select class="form-select" id="poli" name="poli_id" required>
-              <option selected disabled>-- Pilih Poli --</option>
-              @foreach($poli as $poli)
-                <option value="{{ $poli->id }}">{{ $poli->nama_poli }}</option>
-              @endforeach
-            </select>
-          </div>
+            @csrf
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="pasien" class="form-label">Nama Pasien</label>
+                <select class="form-select" id="pasien" name="detail_keluarga_id" required>
+                  <option selected disabled>-- Pilih Anggota Keluarga --</option>
+                  @foreach ($anggota as $pasiensakit)
+                    <option value="{{ $pasiensakit->id }}">{{ $pasiensakit->nama }}</option>
+                  @endforeach
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="poli" class="form-label">Pilih Poli</label>
+                <select class="form-select" id="poli" name="poli_id" required>
+                  <option selected disabled>-- Pilih Poli --</option>
+                  @foreach($poli as $itemPoli)
+                    <option value="{{ $itemPoli->id }}">{{ $itemPoli->nama_poli }}</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
 
-            <!-- Tanggal -->
             <div class="mb-3">
               <label for="tanggal" class="form-label">Tanggal Janji</label>
               <input type="date" class="form-control" name="tanggal" id="tanggal" required>
@@ -64,12 +75,44 @@
                 @endfor
               </div>
             </div>
+        
 
-            <!-- Submit -->
             <div class="d-grid mt-4">
               <button type="submit" class="btn btn-primary">Ambil Antrian</button>
             </div>
           </form>
+
+  @if (isset($invoice))
+  <div class="card mt-4 shadow border-success">
+    <div class="card-header bg-success text-white">
+      <h5 class="mb-0">Invoice Antrian Berhasil</h5>
+    </div>
+    <div class="card-body">
+      <p><strong>Nama Pasien:</strong> {{ $invoice->detailKeluarga->nama ?? '-' }}</p>
+      <p><strong>Poli:</strong> {{ $invoice->poli->nama_poli ?? '-' }}</p>
+      <p><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($invoice->tanggal)->format('d-m-Y') }}</p>
+      <p><strong>Jam:</strong> {{ $invoice->jam }}</p>
+      <p><strong>Nomor Antrian:</strong> <span class="badge bg-primary fs-6">{{ $invoice->nomor_antrian }}</span></p>
+      <p><strong>Status:</strong> {{ $invoice->status }}</p>
+      @if ($invoice->status === 'Menunggu')
+        <div class="mt-3">
+          <form action="{{ route('appointment.checkin', $invoice->id) }}" method="POST" class="d-inline">
+            @csrf
+            <button type="submit" class="btn btn-success btn-sm">Check-In</button>
+          </form>
+          <form action="{{ route('appointment.cancel', $invoice->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin membatalkan janji temu ini?');">
+            @csrf
+            <button type="submit" class="btn btn-danger btn-sm">Batal</button>
+          </form>
+        </div>
+      @endif
+      <div class="mt-3 text-end">
+        <a href="{{ route('appointment.index') }}" class="btn btn-sm btn-secondary">Kembali</a>
+      </div>
+    </div>
+  </div>
+@endif
+
         </div>
       </div>
     </div>
@@ -83,19 +126,17 @@
     color: #0d6efd;
     transition: all 0.3s ease;
   }
-
   .btn-time:hover,
   .btn-check:checked + .btn-time {
     background: linear-gradient(45deg, rgb(4, 103, 184), rgb(0, 255, 149));
     color: white;
     border-color: transparent;
   }
-
   .btn-time.disabled {
-    background-color: #d3d3d3 !important; /* Warna abu-abu */
-    color: #808080; /* Warna teks abu-abu */
+    background-color: #d3d3d3 !important;
+    color: #808080;
     border-color: #d3d3d3;
-    pointer-events: none; /* Menonaktifkan interaksi */
+    pointer-events: none;
   }
 </style>
 
@@ -104,59 +145,44 @@
     const poliSelect = document.getElementById('poli');
     const tanggalInput = document.getElementById('tanggal');
     const jamSlots = document.getElementById('jam-slot');
-    const jamSlotContainer = jamSlots.closest('.mb-3'); // Mengambil container card jam
+    const jamSlotContainer = jamSlots.closest('.mb-3');
 
-    // Sembunyikan card jam saat halaman dimuat
     jamSlotContainer.style.display = 'none';
 
-    // Fungsi untuk mendapatkan slot yang sudah diambil dari server
     function fetchTakenSlots(poli, tanggal) {
       return fetch(`/appointments/${poli}/${tanggal}`)
         .then(response => response.json())
-        .then(data => {
-          return data; // Mengembalikan array slot waktu yang sudah diambil
-        })
+        .then(data => data)
         .catch(error => {
           console.error('Error fetching taken slots:', error);
           return [];
         });
     }
 
-    // Fungsi untuk memperbarui slot yang tersedia
     async function updateAvailableSlots() {
       const selectedDate = tanggalInput.value;
       const selectedPoli = poliSelect.value;
 
       if (selectedDate && selectedPoli) {
-        // Tampilkan card jam
         jamSlotContainer.style.display = 'block';
-
-        // Ambil slot yang sudah terambil dari server
         const takenTimes = await fetchTakenSlots(selectedPoli, selectedDate);
-        
-        // Reset semua slot untuk diaktifkan
         const allSlots = jamSlots.querySelectorAll('.btn-check');
         allSlots.forEach(slot => {
           const slotTime = slot.value;
           const label = slot.nextElementSibling;
-
           if (takenTimes.includes(slotTime)) {
-            // Nonaktifkan slot yang sudah terambil
             slot.disabled = true;
-            label.classList.add('disabled'); // Tambahkan styling disabled
+            label.classList.add('disabled');
           } else {
-            // Aktifkan slot yang belum terambil
             slot.disabled = false;
             label.classList.remove('disabled');
           }
         });
       } else {
-        // Sembunyikan card jam jika tanggal atau poli belum dipilih
         jamSlotContainer.style.display = 'none';
       }
     }
 
-    // Event listeners untuk memilih poli dan tanggal
     poliSelect.addEventListener('change', updateAvailableSlots);
     tanggalInput.addEventListener('change', updateAvailableSlots);
   });

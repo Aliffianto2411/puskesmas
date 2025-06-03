@@ -55,7 +55,7 @@
                 <table class="table table-striped mb-0">
                     <thead class="table-light">
                     <tr>
-                        <th>#</th><th>Nama</th><th>NIK</th><th>JK</th>
+                        <th>No</th><th>Nama</th><th>NIK</th><th>Jenis Kelamin</th>
                         <th>Tgl Lahir</th><th>Gol. Darah</th><th></th>
                     </tr>
                     </thead>

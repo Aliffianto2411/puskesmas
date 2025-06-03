@@ -11,9 +11,9 @@ class PoliSeeder extends Seeder
     {
         $timestamp = date('Y-m-d H:i:s');
         Poli::insert([
-            ['nama_poli' => 'Poli Umum', 'created_at' => $timestamp, 'updated_at' => $timestamp],
-            ['nama_poli' => 'Poli Gigi', 'created_at' => $timestamp, 'updated_at' => $timestamp],
-            ['nama_poli' => 'Poli Anak', 'created_at' => $timestamp, 'updated_at' => $timestamp],
+            ['nama_poli' => 'Poli Umum', 'kode_poli' => 'U', 'created_at' => $timestamp, 'updated_at' => $timestamp],
+            ['nama_poli' => 'Poli Gigi', 'kode_poli' => 'G', 'created_at' => $timestamp, 'updated_at' => $timestamp],
+            ['nama_poli' => 'Poli Anak', 'kode_poli' => 'A', 'created_at' => $timestamp, 'updated_at' => $timestamp],
         ]);
 
     }

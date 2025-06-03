@@ -2,20 +2,20 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Poli extends Model
 {
-    use HasUuids;
-    protected $table = 'poli'; // sesuaikan nama tabel
+    use HasFactory;
+    protected $table = 'poli';
 
     protected $fillable = [
-        'nama_poli',
+        'nama_poli','kode_poli',
     ];
 
     public function janjiTemu()
     {
-        return $this->hasMany(JanjiTemu::class, 'poli_id'); // relasi ke tabel janji_temu
+        return $this->hasMany(JanjiTemu::class, 'poli_id'); 
     }
 }
