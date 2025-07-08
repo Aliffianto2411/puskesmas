@@ -15,13 +15,12 @@ class CreateJanjiTemuTable extends Migration
     {
         Schema::create('janji_temu', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('user_id');
-        $table->foreignId('poli_id');
+        $table->foreignId('user_id')->nullable();
+        $table->foreignId('poli_id')->nullable();
         $table->date('tanggal');
         $table->time('jam');
         $table->foreignId('detail_keluarga_id')->nullable();
         $table->string('status');
-        $table->string('nomor_antrian')->unique();
         $table->timestamps();
     });
     }

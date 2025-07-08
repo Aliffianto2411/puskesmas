@@ -104,7 +104,7 @@
 <div class="container text-center">
     <h2 class="fw-bold mb-3">Layanan Kesehatan</h2>
     <p class="text-muted mb-5">Berbagai layanan kesehatan yang tersedia di Puskesmas Meral</p>
-    <div class="row g-8">s
+    <div class="row g-8">
       <!-- Layanan 1 -->
       <div class="col-md-4">
         <div class="service-box p-4 border rounded-3 h-100">
@@ -186,16 +186,7 @@
           <p>Pelayanan cepat untuk penanganan kasus darurat medis dan tindakan penyelamatan jiwa.</p>
         </div>
       </div>
-        <!-- Layanan 8: Kesehatan Lansia & Prolanis -->
-        <div class="col-md-4 mb-4">
-        <div class="service-box p-4 border rounded-3 h-100">
-          <div class="icon mb-3">
-            <i class="bi bi-person-walking fs-1 text-primary"></i>
-          </div>
-          <h5 class="fw-semibold">Kesehatan Lansia & Prolanis</h5>
-          <p>Program pemantauan dan pendampingan untuk lansia serta pengelolaan penyakit kronis.</p>
-        </div>
-      </div>
+      
     </div>
   </div>
 </section>

@@ -10,11 +10,11 @@ class RiwayatAntrianController extends Controller
 {
     public function index()
     {
-         $riwayat = JanjiTemu::with('poli')
+        $riwayat = JanjiTemu::with(['poli', 'detailKeluarga'])
             ->where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->get();
 
-    return view('riwayat', compact('riwayat'));
+        return view('riwayat', compact('riwayat'));
     }
 }

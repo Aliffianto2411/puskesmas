@@ -9,20 +9,19 @@ class JanjiTemu extends Model
     protected $table = 'janji_temu'; // sesuaikan nama tabel
 
     const STATUS = [
-        'Menunggu' => 'Menunggu',
-        'Diterima' => 'Diterima',
-        'Selesai' => 'Selesai',
+        'Menunggu'   => 'Menunggu',
+        'Diterima'   => 'Diterima',
+        'Selesai'    => 'Selesai',
         'Dibatalkan' => 'Dibatalkan',
     ];
 
     protected $fillable = [
         'user_id',
-        'detail_keluarga_id', // foreign key ke detail_keluarga
-        'poli_id',   // pakai poli_id supaya relasi ke tabel polis
+        'detail_keluarga_id',
+        'poli_id',
         'tanggal',
         'jam',
-        'nomor_antrian',
-        'status', 
+        'status',
         'created_at',
         'updated_at',
     ];
@@ -36,7 +35,7 @@ class JanjiTemu extends Model
     {
         return $this->belongsTo(DetailKeluarga::class, 'detail_keluarga_id');
     }
-    
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

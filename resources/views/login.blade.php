@@ -64,25 +64,64 @@
         <form method="POST" action="{{ route('register-proses') }}">
           @csrf
           <div class="mb-3">
-            <label class="form-label" for="name">Nama Lengkap</label>
-            <input type="text" name="nama" class="form-control" id="name" required />
+        <label class="form-label" for="name">Nama Lengkap</label>
+        <input type="text" name="nama" class="form-control" required />
           </div>
 
           <div class="mb-3">
-            <label class="form-label" for="email">Email</label>
-            <input type="email" name="email" class="form-control" required />
+              <label class="form-label" for="email">Email</label>
+              <input type="email" name="email" class="form-control" required />
           </div>
 
           <div class="mb-3">
-            <label class="form-label" for="password">Kata Sandi</label>
-            <input type="password" name="password" class="form-control" required />
+              <label class="form-label" for="nik">NIK</label>
+              <input type="text" name="nik" class="form-control" required />
           </div>
 
           <div class="mb-3">
-            <label class="form-label" for="password_confirmation">Konfirmasi Sandi</label>
-            <input type="password" name="password_confirmation" class="form-control" required />
+              <label class="form-label" for="jenis_kelamin">Jenis Kelamin</label>
+              <select name="jenis_kelamin" class="form-control" required>
+                  <option value="">-- Pilih --</option>
+                  <option value="Laki-laki">Laki-laki</option>
+                  <option value="Perempuan">Perempuan</option>
+              </select>
           </div>
 
+          <div class="mb-3">
+              <label class="form-label" for="tanggal_lahir">Tanggal Lahir</label>
+              <input type="date" name="tanggal_lahir" class="form-control" required />
+          </div>
+
+          <div class="mb-3">
+              <label class="form-label" for="alamat">Alamat</label>
+              <input type="text" name="alamat" class="form-control" required />
+          </div>
+
+          <div class="mb-3">
+              <label class="form-label" for="no_hp">No HP</label>
+              <input type="text" name="no_hp" class="form-control" required />
+          </div>
+
+          <div class="mb-3">
+              <label class="form-label" for="golongan_darah">Golongan Darah</label>
+              <select name="golongan_darah" class="form-control">
+                  <option value="">-- Pilih --</option>
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="AB">AB</option>
+                  <option value="O">O</option>
+              </select>
+          </div>
+
+          <div class="mb-3">
+              <label class="form-label" for="password">Kata Sandi</label>
+              <input type="password" name="password" class="form-control" required />
+          </div>
+
+          <div class="mb-3">
+              <label class="form-label" for="password_confirmation">Konfirmasi Sandi</label>
+              <input type="password" name="password_confirmation" class="form-control" required />
+          </div>
           <button type="submit" class="btn btn-primary w-100 mb-3">Daftar</button>
         </form>
       </div>

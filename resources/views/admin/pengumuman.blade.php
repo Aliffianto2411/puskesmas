@@ -1,59 +1,69 @@
 @extends('layouts.user')
 
 @section('content')
-<div class="container">
-    <h2><i class="bi bi-megaphone-fill"></i> Daftar Pengumuman</h2>
+<div class="container py-4">
+    <h2 class="mb-4"><i class=""></i> Daftar Pengumuman</h2>
 
-    <!-- Tombol Tambah Pengumuman -->
-    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalTambahPengumuman">
-        <i class="bi bi-plus-circle"></i> Tambah Pengumuman
-    </button>
-
+    {{-- Flash message --}}
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <!-- Tabel Data Pengumuman -->
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Judul</th>
-                <th>Isi</th>
-                <th>Tanggal Pengumuman</th>
-                <th>Tanggal Berakhir</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($pengumuman as $p)
-            <tr>
-                <td>{{ $p->judul }}</td>
-                <td>{{ Str::limit($p->isi, 100) }}</td>
-                <td>{{ \Carbon\Carbon::parse($p->tanggal_pengumuman)->translatedFormat('d F Y') }}</td>
-              <td>{{ \Carbon\Carbon::parse($p->tanggal_berakhir)->translatedFormat('d F Y') }}</td>
+    {{-- Tombol Tambah --}}
+    <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahPengumuman">
+            <i class="bi bi-plus-circle"></i> Tambah Pengumuman
+        </button>
+    </div>
 
-                <td>
-                    <!-- Tombol Edit -->
-                    <button class="btn btn-warning btn-sm btn-edit" data-id="{{ $p->id }}">
-                        <i class="bi bi-pencil-square"></i> Edit
-                    </button>
+    {{-- Tabel --}}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Judul</th>
+                    <th>Isi</th>
+                    <th>Tanggal Pengumuman</th>
+                    <th>Tanggal Berakhir</th>
+                    <th style="width: 140px;">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($pengumuman as $p)
+                <tr>
+                    <td>{{ $p->judul }}</td>
+                    <td>{{ Str::limit($p->isi, 100) }}</td>
+                    <td>{{ \Carbon\Carbon::parse($p->tanggal_pengumuman)->translatedFormat('d F Y') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($p->tanggal_berakhir)->translatedFormat('d F Y') }}</td>
+                    <td>
+                        <div class="d-flex gap-1">
+                            {{-- Edit --}}
+                            <button class="btn btn-warning btn-sm btn-edit" data-id="{{ $p->id }}">
+                                <i class="bi bi-pencil-square"></i>
+                            </button>
 
-                    <!-- Tombol Hapus -->
-                    <form action="{{ route('pengumuman.destroy', $p->id) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')">
-                            <i class="bi bi-trash"></i> Hapus
-                        </button>
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+                            {{-- Hapus --}}
+                            <form action="{{ route('pengumuman.destroy', $p->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger btn-sm">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="5" class="text-center text-muted">Belum ada pengumuman.</td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
 </div>
 
-<!-- Modal Tambah Pengumuman -->
+{{-- Modal Tambah --}}
 <div class="modal fade" id="modalTambahPengumuman" tabindex="-1" aria-labelledby="modalTambahPengumumanLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -89,29 +99,30 @@
   </div>
 </div>
 
-<!-- Modal Edit Pengumuman -->
+{{-- Modal Edit --}}
 <div class="modal fade" id="modalEditPengumuman" tabindex="-1" aria-labelledby="modalEditPengumumanLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content" id="editPengumumanContent">
-      <!-- Isi modal akan dimuat oleh AJAX -->
+      <!-- AJAX content will be injected here -->
     </div>
   </div>
 </div>
 
+{{-- Script untuk AJAX Edit --}}
+@push('scripts')
 <script>
     $(document).on('click', '.btn-edit', function () {
         var id = $(this).data('id');
         $.get('/pengumuman/' + id + '/edit')
             .done(function (data) {
                 $('#editPengumumanContent').html(data);
-                var modal = new bootstrap.Modal(document.getElementById('modalEditPengumuman'));
-                modal.show();
+                new bootstrap.Modal(document.getElementById('modalEditPengumuman')).show();
             })
             .fail(function () {
-                alert('Gagal memuat data edit');
+                alert('Gagal memuat data untuk diedit.');
             });
     });
 </script>
+@endpush
 
 @endsection
-

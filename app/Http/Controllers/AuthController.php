@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Traits\HasRoles;
 
 class AuthController extends Controller
 {
@@ -15,33 +16,45 @@ class AuthController extends Controller
         return view('login');
     }
 
-
     public function auth(Request $request)
     {
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
-    
-        if (empty($request->email) || empty($request->password)) {
-            return back()->withErrors([
-                'kosong' => 'Email dan password harus diisi'
-            ]);
-        }
-    
+
         $credentials = $request->only('email', 'password');
-        $remember = $request->has('remember'); // true jika checkbox dicentang
-    
+        $remember = $request->has('remember');
+
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
-            return redirect('pendaftaran');
+
+            $user = Auth::user();
+
+            // Redirect berdasarkan role
+            if ($user->hasRole('ADMIN')) {
+                return redirect()->route('admin.dashboard');
+            }
+
+            if ($user->hasRole('DOKTER')) {
+                return redirect()->route('dokter.janji-temu.index');
+            }
+
+            if ($user->hasRole('USER')) {
+                return redirect()->route('pendaftaran');
+            }
+
+            // Jika role tidak dikenali
+            Auth::logout();
+            return redirect()->route('login')->withErrors(['role' => 'Role tidak dikenali']);
         }
-    
+
+        // Jika login gagal
         return back()->withErrors([
-            'loginError' => 'Email atau Password salah'
+            'loginError' => 'Email atau Password salah.'
         ]);
     }
-    
+
     public function logout()
     {
         Auth::logout();
@@ -56,31 +69,21 @@ class AuthController extends Controller
     public function register_proses(Request $request)
     {
         $request->validate([
-            'nama'  => 'required',
-            'email' => 'required|email|unique:users,email',
+            'nama'     => 'required',
+            'email'    => 'required|email|unique:users,email',
             'password' => 'required|min:6',
-            'remember' => 'nullable'
-            
         ]);
 
-        $user =  User::create([
-            'name' => $request->nama,
-            'password' => $request->password,
-            'email' => $request->email,
+        $user = User::create([
+            'name'              => $request->nama,
+            'email'             => $request->email,
+            'password'          => Hash::make($request->password), // Hash password
             'email_verified_at' => Carbon::now(),
-            
-        ])
-        ->assignRole('user');
+        ]);
 
-        $login = [
-            'email'     => $request->email,
-            'password'  => $request->password
-        ];
+        $user->assignRole('USER'); // Gunakan huruf kapital agar konsisten
 
-        if (Auth::attempt($login)) {
-            return redirect()->route('login');
-        } else {
-            return redirect()->route('login')->with('failed', 'Email atau Password Salah');
-        }
+        Auth::login($user);
+        return redirect()->route('pendaftaran');
     }
 }
