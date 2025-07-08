@@ -70,6 +70,8 @@ class JanjiTemuController extends Controller
                 'tanggal'             => $request->tanggal,
                 'jam'                 => $request->jam,
                 'status'              => JanjiTemu::STATUS['Menunggu'],
+                'status_pendaftaran'  => JanjiTemu::STATUS_PENDAFTARAN['Online'],
+                'created_at'          => now(),
             ]);
 
             $janji = JanjiTemu::where('user_id', Auth::id())

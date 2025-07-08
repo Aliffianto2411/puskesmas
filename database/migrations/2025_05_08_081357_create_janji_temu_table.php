@@ -21,6 +21,7 @@ class CreateJanjiTemuTable extends Migration
         $table->time('jam');
         $table->foreignId('detail_keluarga_id')->nullable();
         $table->string('status');
+        $table->string('status_pendaftaran');
         $table->timestamps();
     });
     }

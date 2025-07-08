@@ -62,7 +62,7 @@
                 @php
                   $start = strtotime("08:00");
                   $end = strtotime("12:00");
-                  $interval = 10 * 60;
+                  $interval = 15 * 60;
                   $i = 0;
                 @endphp
 

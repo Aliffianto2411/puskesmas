@@ -14,6 +14,10 @@ class JanjiTemu extends Model
         'Selesai'    => 'Selesai',
         'Dibatalkan' => 'Dibatalkan',
     ];
+    const STATUS_PENDAFTARAN = [
+        'Online' => 'Online',
+        'Offline' => 'Offline',
+    ];
 
     protected $fillable = [
         'user_id',
@@ -22,6 +26,7 @@ class JanjiTemu extends Model
         'tanggal',
         'jam',
         'status',
+        'status_pendaftaran',
         'created_at',
         'updated_at',
     ];
