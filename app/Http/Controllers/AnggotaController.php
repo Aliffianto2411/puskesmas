@@ -11,6 +11,7 @@ class AnggotaController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
+            'keluarga_id' => 'required|exists:keluargas,id',
             'nama'           => 'required|string|max:100',
             'nik'            => 'required|digits:16|unique:detail_keluargas,nik',
             'jenis_kelamin'  => 'required|in:Laki-laki,Perempuan',
@@ -19,23 +20,11 @@ class AnggotaController extends Controller
             'golongan_darah' => 'nullable|in:A,B,AB,O',
         ]);
 
-        $keluarga = $request->user()->keluarga;
+        $anggota = new DetailKeluarga($data);
+        $anggota->save();
 
-        if (!$keluarga) {
-            return back()->withErrors('Buat KK terlebih dahulu.');
-        }
-
-        $keluarga->anggota()->create([
-            'nama'           => $data['nama'],
-            'nik'            => $data['nik'],
-            'jenis_kelamin'  => $data['jenis_kelamin'],
-            'tanggal_lahir'  => $data['tanggal_lahir'],
-            'alamat'         => $data['alamat'],
-            'golongan_darah' => $data['golongan_darah'],
-            'created_at'   => now(),
-        ])->save();
-
-        return back()->with('success', 'Anggota ditambahkan.');
+        return redirect()->route('keluarga.show', $data['keluarga_id'])
+            ->with('success', 'Anggota berhasil ditambahkan.');
     }
 
     // Form edit (opsional)
@@ -69,3 +58,4 @@ class AnggotaController extends Controller
     }
 
 }
+

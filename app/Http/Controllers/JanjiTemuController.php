@@ -60,9 +60,7 @@ class JanjiTemuController extends Controller
             return back()->with('error', 'Anggota keluarga ini sudah memiliki janji hari ini.');
         }
 
-        try {
-            DB::beginTransaction();
-
+ 
             JanjiTemu::create([
                 'user_id'             => Auth::id(),
                 'detail_keluarga_id'  => $request->detail_keluarga_id,
@@ -71,7 +69,6 @@ class JanjiTemuController extends Controller
                 'jam'                 => $request->jam,
                 'status'              => JanjiTemu::STATUS['Menunggu'],
                 'status_pendaftaran'  => JanjiTemu::STATUS_PENDAFTARAN['Online'],
-                'created_at'          => now(),
             ]);
 
             $janji = JanjiTemu::where('user_id', Auth::id())
@@ -82,10 +79,7 @@ class JanjiTemuController extends Controller
             DB::commit();
 
             return back()->with('success', 'Janji temu berhasil dibuat.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with('error', 'Terjadi kesalahan, silakan coba lagi.');
-        }
+      
     }
 
     public function checkin($id)

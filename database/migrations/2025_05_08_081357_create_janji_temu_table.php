@@ -18,7 +18,7 @@ class CreateJanjiTemuTable extends Migration
         $table->foreignId('user_id')->nullable();
         $table->foreignId('poli_id')->nullable();
         $table->date('tanggal');
-        $table->time('jam');
+        $table->time('jam')->nullable();
         $table->foreignId('detail_keluarga_id')->nullable();
         $table->string('status');
         $table->string('status_pendaftaran');

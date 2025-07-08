@@ -25,6 +25,7 @@
     <li><a href="{{ route('admin.dashboard') }}" class="nav-link text-white"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a></li>
     <li><a href="{{ route('pengumuman.index') }}" class="nav-link text-white"><i class="bi bi-megaphone-fill me-2"></i> Pengumuman</a></li>
     <li><a href="{{ route('poli.index') }}" class="nav-link text-white"><i class="bi bi-hospital me-2"></i> Poli</a></li>
+     <li><a href="{{ route('keluarga.index') }}" class="nav-link text-white"><i class="bi bi-people-fill me-2"></i> Keluarga</a></li>
     <li><a href="{{ route('pendaftaran_offline.create') }}" class="nav-link text-white"><i class="bi bi-person-plus-fill me-2"></i> Pendaftaran Offline</a></li>
     <li><a href="{{ route('poli.index') }}" class="nav-link text-white"><i class="bi bi-calendar-event me-2"></i> Jadwal</a></li>
     @endrole

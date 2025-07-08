@@ -45,9 +45,13 @@ Route::middleware(['auth', 'role:USER|ADMIN'])->group(function () {
     Route::put('/profile/{pasien}', [PasienController::class, 'update'])->name('profile.update');
 
     // Keluarga
-    Route::get('/keluarga', [KeluargaController::class, 'show'])->name('keluarga.show');
-    Route::post('/keluarga', [KeluargaController::class, 'store'])->name('keluarga.store');
+    //rute search keluarga
+    Route::get('/keluarga/list', [KeluargaController::class, 'index'])->name('keluarga.index');
+
+Route::get('/keluarga/{id?}', [KeluargaController::class, 'show'])->name('keluarga.show');    
+Route::post('/keluarga', [KeluargaController::class, 'store'])->name('keluarga.store');
     Route::put('/keluarga', [KeluargaController::class, 'update'])->name('keluarga.update');
+    Route::delete('/keluarga/{id}', [KeluargaController::class, 'destroy'])->name('keluarga.destroy');
 
     // Anggota Keluarga
     Route::post('/anggota', [AnggotaController::class, 'store'])->name('anggota.store');
@@ -76,7 +80,7 @@ Route::middleware(['auth', 'role:USER|ADMIN'])->group(function () {
 // ADMIN Routes
 Route::middleware(['auth', 'role:ADMIN'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-
+    
     Route::resource('poli', PoliController::class);
     Route::resource('pengumuman', PengumumanController::class);
 });
