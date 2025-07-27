@@ -40,14 +40,20 @@ class AdminDashboardController extends Controller
             ->orderBy('jam')
             ->get();
 
-        $riwayatTerakhir = JanjiTemu::with('poli', 'user')
+        // Perbaikan di sini: gunakan eager loading detailKeluarga, bukan user
+        $riwayatTerakhir = JanjiTemu::with('poli', 'detailKeluarga')
             ->latest()
             ->take(5)
             ->get();
 
         return view('admin.dashboard', compact(
-            'totalPasien', 'totalPoli', 'janjiHariIni', 'antrianAktif',
-            'grafikData', 'antrianHariIni', 'riwayatTerakhir'
+            'totalPasien',
+            'totalPoli',
+            'janjiHariIni',
+            'antrianAktif',
+            'grafikData',
+            'antrianHariIni',
+            'riwayatTerakhir'
         ));
     }
 }

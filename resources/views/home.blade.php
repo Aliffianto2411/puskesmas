@@ -189,7 +189,53 @@
       
     </div>
   </div>
+  <section class="py-5" id="pengumuman">
+  <div class="container">
+    <div class="text-center mb-4">
+      <h2 class="fw-bold text-success">Pengumuman</h2>
+      <p class="text-muted">Informasi terbaru dari Puskesmas Meral</p>
+    </div>
+
+    @if ($pengumuman->count() > 0)
+      <div class="row justify-content-center">
+        @foreach ($pengumuman as $item)
+          <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+              <div class="card-body">
+                <h5 class="card-title">{{ $item->judul }}</h5>
+                <p class="card-text">{{ Str::limit(strip_tags($item->isi), 100, '...') }}</p>
+                <p class="text-muted small mb-0">
+                  {{ \Carbon\Carbon::parse($item->tanggal_pengumuman)->translatedFormat('d F Y') }}
+                </p>
+              </div>
+            </div>
+          </div>
+          
+        @endforeach
+      </div>
+    @else
+      <p class="text-center">Belum ada pengumuman terbaru.</p>
+    @endif
+  </div>
+
+  <footer class="bg-dark text-white py-4 mt-5">
+  <div class="container text-center">
+    <p class="mb-1">&copy; {{ date('Y') }} Puskesmas Meral. All rights reserved.</p>
+    <p class="small mb-0">
+      Jl. Contoh Alamat No. 123, Meral, Kabupaten Karimun, Kepulauan Riau<br>
+      Telp: (0777) 123456 | Email: puskesmasmeral@email.com
+    </p>
+    <div class="mt-2">
+      <a href="#" class="text-white me-2"><i class="bi bi-facebook"></i></a>
+      <a href="#" class="text-white me-2"><i class="bi bi-instagram"></i></a>
+      <a href="#" class="text-white"><i class="bi bi-whatsapp"></i></a>
+    </div>
+  </div>
+</footer>
+
 </section>
+
+
 
 <style>
 

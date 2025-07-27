@@ -7,23 +7,50 @@
     {{-- Statistik --}}
     <div class="row mb-4">
         @php
-            $cards = [
-                ['title' => 'Total Pasien', 'value' => $totalPasien, 'class' => 'primary'],
-                ['title' => 'Total Poli', 'value' => $totalPoli, 'class' => 'success'],
-                ['title' => 'Janji Hari Ini', 'value' => $janjiHariIni, 'class' => 'info'],
-                ['title' => 'Antrian Aktif', 'value' => $antrianAktif, 'class' => 'danger'],
-            ];
-        @endphp
-        @foreach ($cards as $card)
-        <div class="col-md-3">
-            <div class="card text-white bg-{{ $card['class'] }} mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">{{ $card['title'] }}</h5>
-                    <p class="fs-4">{{ $card['value'] }}</p>
-                </div>
+    $cards = [
+        [
+            'title' => 'Total Pasien',
+            'value' => $totalPasien,
+            'class' => 'primary',
+            'route' => null // tidak ada link
+        ],
+        [
+            'title' => 'Total Poli',
+            'value' => $totalPoli,
+            'class' => 'success',
+            'route' => route('admin.poli.index')
+        ],
+        [
+            'title' => 'Janji Hari Ini',
+            'value' => $janjiHariIni,
+            'class' => 'info',
+            'route' => route('admin.janji.offline.index')
+        ],
+        [
+            'title' => 'Antrian Aktif',
+            'value' => $antrianAktif,
+            'class' => 'danger',
+            'route' => route('admin.janji.offline.index')
+        ],
+    ];
+@endphp
+
+@foreach ($cards as $card)
+    <div class="col-md-3">
+        @if ($card['route'])
+            <a href="{{ $card['route'] }}" class="text-decoration-none">
+        @endif
+        <div class="card text-white bg-{{ $card['class'] }} mb-3 h-100">
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ $card['title'] }}</h5>
+                <p class="fs-4">{{ $card['value'] }}</p>
             </div>
         </div>
-        @endforeach
+        @if ($card['route'])
+            </a>
+        @endif
+    </div>
+@endforeach
     </div>
 
     {{-- Grafik --}}
@@ -74,45 +101,51 @@
     </div>
 
     {{-- Riwayat Pendaftaran --}}
-    <div class="card">
-        <div class="card-header">Riwayat Pendaftaran Terakhir</div>
-        <div class="card-body table-responsive">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Nama Pasien</th>
-                        <th>Poli</th>
-                        <th>Tanggal</th>
-                        <th>Jam</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($riwayatTerakhir as $r)
-                    <tr>
-                        <td>{{ $r->user->name ?? '-' }}</td>
-                        <td>{{ $r->poli->nama_poli ?? '-' }}</td>
-                        <td>{{ \Carbon\Carbon::parse($r->tanggal)->format('d M Y') }}</td>
-                        <td>{{ \Carbon\Carbon::parse($r->jam)->format('H:i') }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+   {{-- Riwayat Pendaftaran --}}
+<div class="card">
+    <div class="card-header">Riwayat Pendaftaran Terakhir</div>
+    <div class="card-body table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Nama Pasien</th>
+                    <th>Poli</th>
+                    <th>Tanggal</th>
+                    <th>Jam</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($riwayatTerakhir as $r)
+                <tr>
+                    <td>{{ $r->detailKeluarga->nama ?? '-' }}</td>
+                    <td>{{ $r->poli->nama_poli ?? '-' }}</td>
+                    <td>{{ \Carbon\Carbon::parse($r->tanggal)->format('d M Y') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($r->jam)->format('H:i') }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
+</div>
+
 </div>
 
 {{-- Chart.js --}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Assign PHP data to JS variables first
+    const grafikLabels = {!! json_encode($grafikData['labels'] ?? []) !!};
+    const grafikData = {!! json_encode($grafikData['data'] ?? []) !!};
+
     const ctx = document.getElementById('grafikPasien').getContext('2d');
     const chart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: {!! json_encode($grafikData['labels'] ?? []) !!},
+            labels: grafikLabels,
             datasets: [{
                 label: 'Jumlah Pasien',
-                data: {!! json_encode($grafikData['data'] ?? []) !!},
+                data: grafikData,
                 backgroundColor: 'rgba(54, 162, 235, 0.7)',
                 borderRadius: 6,
                 borderWidth: 1

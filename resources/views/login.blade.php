@@ -74,6 +74,11 @@
           </div>
 
           <div class="mb-3">
+              <label class="form-label" for="no_kk">Nomor KK</label>
+              <input type="text" name="no_kk" class="form-control" required />
+          </div>
+
+          <div class="mb-3">
               <label class="form-label" for="nik">NIK</label>
               <input type="text" name="nik" class="form-control" required />
           </div>

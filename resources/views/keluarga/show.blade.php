@@ -32,7 +32,7 @@
                     <div class="col-auto">
                         <input type="hidden" name="user_id" value="{{ auth()->id() }}">
                         <span class="form-control-plaintext">
-                            Kepala Keluarga: <strong>{{ auth()->user()->name }}</strong>
+                            Dibuat oleh: <strong>{{ auth()->user()->name }}</strong>
                         </span>
                     </div>
                     <div class="col-auto">

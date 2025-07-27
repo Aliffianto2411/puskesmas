@@ -32,4 +32,5 @@ class Pasien extends Model
         'no_hp',
         'golongan_darah',
     ];
+    
 }

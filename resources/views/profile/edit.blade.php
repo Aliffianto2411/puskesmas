@@ -20,7 +20,8 @@
             @endif
 
             {{-- form --}}
-            <form action="{{ route('profile.update', $pasien->id) }}" method="POST">
+            <form action="{{ route('profile.update', ['pasien' => $pasien->id]) }}" method="POST">
+
                 @csrf
                 @method('PUT')
 
@@ -82,7 +83,8 @@
 
                 <div class="d-flex gap-2">
                     <button type="submit" class="btn btn-primary">Simpan</button>
-                    <a href="{{ route('profile.edit', $pasien->id) }}" class="btn btn-secondary">Batal</a>
+                    <a href="{{ route('profile.edit', ['id' => $pasien->id]) }}" class="btn btn-secondary">Batal</a>
+
                 </div>
             </form>
         </div>

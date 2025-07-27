@@ -53,30 +53,7 @@
   </div>
 
 
-  <!-- Jadwal Dokter Hari Ini -->
-  <div class="card shadow-sm mb-4">
-    <div class="card-body">
-      <h5 class="card-title">Jadwal Dokter Hari Ini</h5>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Poli</th>
-            <th>Dokter</th>
-            <th>Jam Praktek</th>
-          </tr>
-        </thead>
-        <tbody>
-          @foreach($jadwalDokter as $jadwal)
-          <tr>
-            <td>{{ $jadwal['poli'] }}</td>
-            <td>{{ $jadwal['dokter'] }}</td>
-            <td>{{ $jadwal['jam'] }}</td>
-          </tr>
-          @endforeach
-        </tbody>
-      </table>
-    </div>
-  </div>
+  
 
   <!-- Riwayat Antrian -->
   <div class="card shadow-sm mb-4">

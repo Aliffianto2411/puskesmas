@@ -4,24 +4,37 @@
 <div class="container py-4">
     <h2 class="mb-4"><i class="bi bi-people-fill"></i> Daftar Keluarga</h2>
 
-    @if(auth()->user()->hasRole('ADMIN'))
-    {{-- Form tambah KK --}}
-    <form action="{{ route('keluarga.store') }}" method="POST" class="row g-2 mb-3">
-        @csrf
-        <div class="col-auto">
+   @if(auth()->user()->hasRole('ADMIN'))
+<!-- Tombol untuk membuka modal tambah KK -->
+<button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#modalTambahKK">
+    <i class="bi bi-plus-circle"></i> Tambah KK
+</button>
+
+<!-- Modal Tambah KK -->
+<div class="modal fade" id="modalTambahKK" tabindex="-1" aria-labelledby="modalTambahKKLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form action="{{ route('keluarga.store') }}" method="POST" class="modal-content">
+      @csrf
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTambahKKLabel">Tambah Kartu Keluarga</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+            <label for="no_kk" class="form-label">Nomor KK</label>
             <input type="text" name="no_kk" class="form-control" placeholder="Masukkan No KK (16 digit)" required>
         </div>
-        <div class="col-auto">
-            <input type="hidden" name="user_id" value="{{ auth()->id() }}">
-            <span class="form-control-plaintext">
-                Kepala Keluarga: <strong>{{ auth()->user()->name }}</strong>
-            </span>
-        </div>
-        <div class="col-auto">
-            <button class="btn btn-success">Tambah KK</button>
-        </div>
+        <input type="hidden" name="user_id" value="{{ auth()->id() }}">
+        <p class="text-muted">Dibuat oleh: <strong>{{ auth()->user()->name }}</strong></p>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success">Simpan</button>
+      </div>
     </form>
+  </div>
+</div>
 @endif
+
     <!-- Search Bar -->
     <form method="GET" action="{{ route('keluarga.index') }}" class="mb-3">
         <div class="input-group">
@@ -35,7 +48,7 @@
             <thead class="table-success">
                 <tr>
                     <th>No KK</th>
-                    <th>Nama Kepala Keluarga</th>
+                    <th>Dibuat Oleh</th>
                     <th>Anggota Keluarga</th>
                     <th style="width: 150px;">Aksi</th>
                 </tr>
