@@ -55,35 +55,38 @@ public function index()
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Pasien $pasien)
-    {
-        return view('profile.edit', compact('pasien'));
-    }
-
+    public function edit($id)
+{
+    $pasien = Pasien::findOrFail($id);
+    return view('profile.edit', compact('pasien'));
+}
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Pasien $pasien)
-    {
-        $validated = $request->validate([
-            'nama' => 'required|string|max:255',
-            'nik' => [
-                'required',
-                'string',
-                'max:16',
-                Rule::unique('pasiens', 'nik')->ignore($pasien->id),
-            ],
-            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
-            'tanggal_lahir' => 'required|date',
-            'alamat' => 'required|string|max:255',
-            'no_hp' => 'required|string|max:15',
-            'golongan_darah' => 'required|in:A,B,AB,O',
-        ]);
+  public function update(Request $request, $id)
+{
+    $pasien = Pasien::findOrFail($id);
 
-        $pasien->update($validated);
+    $validated = $request->validate([
+        'nama' => 'required|string|max:255',
+        'nik' => [
+            'required',
+            'string',
+            'max:16',
+            Rule::unique('pasiens', 'nik')->ignore($id),
+        ],
+        'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+        'tanggal_lahir' => 'required|date',
+        'alamat' => 'required|string|max:255',
+        'no_hp' => 'required|string|max:15',
+        'golongan_darah' => 'required|in:A,B,AB,O',
+    ]);
 
-        return redirect()->route('profile.index')->with('success', 'Profil berhasil diperbarui.');
-    }
+    $pasien->update($validated);
+
+    return redirect()->route('profile.index')->with('success', 'Profil berhasil diperbarui.');
+}
+
 
     /**
      * Remove the specified resource from storage (optional).

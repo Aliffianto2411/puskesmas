@@ -23,7 +23,6 @@
                             <th>Tanggal</th>
                             <th>Anggota Keluarga</th>
                             <th>Poli</th>
-                            <th>Nomor Antrian</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -33,7 +32,6 @@
                                 <td>{{ \Carbon\Carbon::parse($antrian->tanggal)->format('d M Y') }}</td>
                                 <td>{{ $antrian->detailKeluarga->nama ?? '-' }}</td>
                                 <td>{{ $antrian->poli->nama_poli ?? '-' }}</td>
-                                <td>{{ $antrian->nomor_antrian }}</td>
                                 <td>
                                     @php
                                         $status = strtolower($antrian->status);

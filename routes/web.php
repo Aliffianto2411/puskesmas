@@ -45,10 +45,7 @@ Route::middleware(['auth', 'role:USER|ADMIN'])->group(function () {
     Route::get('/riwayat', [RiwayatAntrianController::class, 'index'])->name('riwayat.index');
 
     // Profile
-    Route::get('/profile', [PasienController::class, 'index'])->name('profile.index');
-    Route::get('/profile/edit/{id}', [PasienController::class, 'edit'])->name('profile.edit');
-    Route::get('/profile/create', [PasienController::class, 'create'])->name('profile.create');
-    Route::put('/profile/{pasien}', [PasienController::class, 'update'])->name('profile.update');
+ Route::resource('profile', PasienController::class);
 
     // Keluarga
     //rute search keluarga
