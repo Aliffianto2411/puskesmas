@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use App\Models\Pasien;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -13,6 +14,7 @@ class PasienSeeder extends Seeder
      */
    public function run(): void
 {
+    $user = User::first(); // Ambil user pertama dari tabel users
     Pasien::insert([
         'nama' => 'Ahmad Fauzi',
         'nik' => '123456789012345',
@@ -21,6 +23,7 @@ class PasienSeeder extends Seeder
         'alamat' => 'Jl. Merdeka No.1',
         'no_hp' => '08123456789',
         'golongan_darah' => 'O',
+        'user_id' => $user->id, // Gunakan user_id dari user pertama
         'created_at' => now(),
         'updated_at' => now(),
     ]);

@@ -31,6 +31,12 @@ class Pasien extends Model
         'alamat',
         'no_hp',
         'golongan_darah',
+        'user_id',
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    
     
 }

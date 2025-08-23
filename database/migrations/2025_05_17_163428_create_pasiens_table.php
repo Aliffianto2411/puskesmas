@@ -20,6 +20,7 @@ return new class extends Migration
         $table->string('alamat');
         $table->string('no_hp')->nullable();
         $table->string('golongan_darah')->nullable();
+        $table->foreignId('user_id');
         $table->timestamps();
         });
     }

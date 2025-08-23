@@ -2,22 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Keluarga;
+use App\Models\User;
 use App\Models\Pasien;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class PasienController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        // Sementara agar tidak error
-        $pasien = Pasien::first();
+public function index()
+{
+    // Ambil data pasien berdasarkan user_id
+    $pasien = Pasien::with(['user.keluarga'])
+        ->where('user_id', Auth::id())
+        ->first();
+    return view('profile.index', compact('pasien'));
+}
 
-        return view('profile.index', compact('pasien'));
-    }
 
     /**
      * Show the form for creating a new resource.

@@ -47,6 +47,7 @@ Route::middleware(['auth', 'role:USER|ADMIN'])->group(function () {
     // Profile
     Route::get('/profile', [PasienController::class, 'index'])->name('profile.index');
     Route::get('/profile/edit/{id}', [PasienController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile/create', [PasienController::class, 'create'])->name('profile.create');
     Route::put('/profile/{pasien}', [PasienController::class, 'update'])->name('profile.update');
 
     // Keluarga

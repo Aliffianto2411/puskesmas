@@ -117,7 +117,7 @@ class AuthController extends Controller
 
         // Insert ke tabel pasiens (PERBAIKAN: MENAMBAHKAN user_id)
         Pasien::create([
-            'user_id'         => $user->id, // <-- PENAMBAHAN AGAR TIDAK ERROR
+            'user_id'         => User::latest()->first()->id,
             'nama'            => $request->nama,
             'nik'             => $request->nik,
             'jenis_kelamin'   => $request->jenis_kelamin,

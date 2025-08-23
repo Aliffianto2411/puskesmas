@@ -38,7 +38,7 @@
                     <td>
                         <div class="d-flex gap-1">
                             {{-- Edit --}}
-                            <button class="btn btn-warning btn-sm btn-edit" data-id="{{ $p->id }}">
+                            <button type="button" class="btn btn-warning btn-sm btn-edit" data-id="{{ $p->id }}">
                                 <i class="bi bi-pencil-square"></i>
                             </button>
 
@@ -104,19 +104,29 @@
   <div class="modal-dialog">
     <div class="modal-content" id="editPengumumanContent">
       <!-- AJAX content will be injected here -->
+      <div class="d-flex justify-content-center align-items-center py-5" id="loadingEdit" style="display:none;">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
 {{-- Script untuk AJAX Edit --}}
 @push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).on('click', '.btn-edit', function () {
         var id = $(this).data('id');
-        $.get('/pengumuman/' + id + '/edit')
+        $('#loadingEdit').show();
+        $('#editPengumumanContent').html($('#loadingEdit')); // tampilkan loading
+
+        $.get("{{ url('/pengumuman') }}/" + id + "/edit")
             .done(function (data) {
                 $('#editPengumumanContent').html(data);
-                new bootstrap.Modal(document.getElementById('modalEditPengumuman')).show();
+                var modal = new bootstrap.Modal(document.getElementById('modalEditPengumuman'));
+                modal.show();
             })
             .fail(function () {
                 alert('Gagal memuat data untuk diedit.');
