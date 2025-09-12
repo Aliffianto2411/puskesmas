@@ -50,15 +50,18 @@ class PoliController extends Controller
     /**
      * Update data poli
      */
-    public function update(PoliRequest $request, Poli $poli)
-    {
-        $poli->update([
-            'nama_poli' => $request->nama_poli,
-            'kode_poli' => $request->kode_poli,
-        ]);
+    public function update(Request $request, $id)
+{
+    $request->validate([
+        'nama_poli' => 'required|string|max:255|unique:poli,nama_poli,' . $id . ',id',
+        'kode_poli' => 'required|string|max:10|unique:poli,kode_poli,' . $id . ',id',
+    ]);
 
-        return redirect()->route('poli.index')->with('success', 'Poli berhasil diperbarui.');
-    }
+    $poli = Poli::findOrFail($id);
+    $poli->update($request->all());
+
+    return redirect()->back()->with('success', 'Poli berhasil diperbarui');
+}
 
     /**
      * Hapus data poli

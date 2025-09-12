@@ -49,11 +49,14 @@ class RolePermissionSeeder extends Seeder
         ]);
 
         // 6. Assign permission terbatas ke dokter
-        $this->assignPermissionsToRole($dokter, [
-            'viewAny' => ['janji_temu', 'jadwal_dokter', 'keluarga'],
-            'view' => ['janji_temu', 'jadwal_dokter', 'keluarga'],
-            'create' => ['janji_temu', 'jadwal_dokter', 'keluarga'],
-            'update' => ['janji_temu', 'jadwal_dokter', 'keluarga'],
+         $this->assignPermissionsToRole($dokter, [
+            'viewAny' => ['janji_temu', 'poli', 'detail_keluarga', 'users', 'roles', 'permissions', 'jadwal_dokter','keluarga','pengumuman', 'janji_temu_offline'],
+            'view' => ['janji_temu', 'poli', 'detail_keluarga', 'users', 'roles', 'permissions', 'jadwal_dokter','keluarga','pengumuman'],
+            'create' => ['janji_temu', 'poli', 'detail_keluarga', 'users', 'roles', 'permissions', 'jadwal_dokter','keluarga','pengumuman'],
+            'update' => ['janji_temu', 'poli', 'detail_keluarga', 'users', 'roles', 'permissions', 'jadwal_dokter','keluarga','pengumuman'],
+            'delete' => ['janji_temu', 'poli', 'detail_keluarga', 'users', 'roles', 'permissions', 'jadwal_dokter','keluarga','pengumuman'],
+            'restore' => ['janji_temu', 'poli', 'detail_keluarga', 'users', 'roles', 'permissions', 'jadwal_dokter','keluarga','pengumuman'],
+            'forceDelete' => ['janji_temu', 'poli', 'detail_keluarga', 'users', 'roles', 'permissions', 'jadwal_dokter','keluarga','pengumuman'],
         ]);
     }
 

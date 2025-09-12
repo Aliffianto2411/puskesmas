@@ -18,7 +18,7 @@
     <li><a href="{{ route('riwayat.index') }}" class="nav-link text-white"><i class="bi bi-clock-history me-2"></i> Riwayat</a></li>
     <li><a href="{{ route('profile.index') }}" class="nav-link text-white"><i class="bi bi-person me-2"></i> Profil</a></li>
     <li><a href="{{ route('keluarga.show') }}" class="nav-link text-white"><i class="bi bi-people-fill me-2"></i> Keluarga</a></li>
-    <li><a href="{{ url('/antrian-poli') }}" class="nav-link text-white"><i class="bi bi-list-ol me-2"></i> Antrian Pendaftaran</a></li>
+    <!-- <li><a href="{{ url('/antrian-poli') }}" class="nav-link text-white"><i class="bi bi-list-ol me-2"></i> Antrian Pendaftaran</a></li> -->
     @endhasanyrole
 
     {{-- MENU ADMIN --}}
@@ -35,10 +35,10 @@
 
     {{-- MENU DOKTER --}}
     @role('DOKTER')
-    <li class="mt-2 text-white fw-bold px-2">DOKTER PANEL</li>
-    <li><a href="{{ route('dokter.janji-temu.index') }}" class="nav-link text-white"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a></li>
-    <li><a href="{{ route('dokter.keluarga.show') }}" class="nav-link text-white"><i class="bi bi-people-fill me-2"></i> Daftar Antrian</a></li>
-    <li><a href="{{ route('dokter.poli.index') }}" class="nav-link text-white"><i class="bi bi-hospital me-2"></i> Riwayat Pasien</a></li>
+    <li class="mt-2 text- fwhitew-bold px-2">DOKTER PANEL</li>
+    <li><a href="{{ route('admin.dashboard') }}" class="nav-link text-white"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a></li>
+     <li><a href="{{ route('dokter.janji_temu_offline.index') }}" class="nav-link text-white"><i class="bi bi-journal-check me-2"></i> Daftar Janji Temu</a></li>
+    
     @endrole
 
   </ul>

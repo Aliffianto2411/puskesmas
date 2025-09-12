@@ -15,22 +15,26 @@ use App\Http\Controllers\{
     RiwayatAntrianController,
     PendaftaranOfflineController,
     JanjiTemuOfflineController,
-    HomeController 
+    HomeController,
+    UserManajemenController
 };
 
+// ======================
 // Public Routes
-Route::get('/', fn() => view('home'));
+// ======================
+Route::get('/', [HomeController::class, 'index']);
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'auth'])->name('auth');
 Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register-proses', [AuthController::class, 'register_proses'])->name('register-proses');
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
+
 Route::get('/pasiencall', fn() => view('pasiencall'));
-Route::get('/', [HomeController::class, 'index']);
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
-// USER Routes
+// ======================
+// USER Routes (USER & ADMIN)
+// ======================
 Route::middleware(['auth', 'role:USER|ADMIN'])->group(function () {
     // Janji Temu
     Route::get('/appointment', [JanjiTemuController::class, 'index'])->name('appointment.index');
@@ -45,30 +49,30 @@ Route::middleware(['auth', 'role:USER|ADMIN'])->group(function () {
     Route::get('/riwayat', [RiwayatAntrianController::class, 'index'])->name('riwayat.index');
 
     // Profile
- Route::resource('profile', PasienController::class);
+    Route::resource('profile', PasienController::class);
 
     // Keluarga
-    //rute search keluarga
     Route::get('/keluarga/list', [KeluargaController::class, 'index'])->name('keluarga.index');
-
-    Route::get('/keluarga/{id?}', [KeluargaController::class, 'show'])->name('keluarga.show');    
+    Route::get('/keluarga/{id?}', [KeluargaController::class, 'show'])->name('keluarga.show');
     Route::post('/keluarga', [KeluargaController::class, 'store'])->name('keluarga.store');
     Route::put('/keluarga', [KeluargaController::class, 'update'])->name('keluarga.update');
     Route::delete('/keluarga/{id}', [KeluargaController::class, 'destroy'])->name('keluarga.destroy');
-    //Pendaftaran Offline
+
+    // API Keluarga
+    Route::get('/api/anggota-keluarga/{no_kk}', function ($no_kk) {
+        $keluarga = \App\Models\Keluarga::where('no_kk', $no_kk)->first();
+        if (!$keluarga) {
+            return response()->json([], 404);
+        }
+        return response()->json($keluarga->detailKeluargas()->get(['id', 'nama']));
+    });
+
+    Route::get('/api/jam-terpakai/{tanggal}/{poli_id}', [JanjiTemuOfflineController::class, 'jamTerpakai']);
+
+    // Pendaftaran Offline
     Route::get('/pendaftaran-offline', [PendaftaranOfflineController::class, 'create'])->name('pendaftaran_offline.create');
     Route::post('/pendaftaran-offline', [PendaftaranOfflineController::class, 'store'])->name('pendaftaran_offline.store');
-    Route::get('/api/anggota-keluarga/{no_kk}', function ($no_kk) {
-    $keluarga = \App\Models\Keluarga::where('no_kk', $no_kk)->first();
-    Route::get('/api/jam-terpakai/{tanggal}/{poli_id}', [App\Http\Controllers\JanjiTemuOfflineController::class, 'jamTerpakai']);
-        
 
-    if (!$keluarga) {
-        return response()->json([], 404);
-    }
-
-    return response()->json($keluarga->detailKeluargas()->get(['id', 'nama']));
-});
     // Anggota Keluarga
     Route::post('/anggota', [AnggotaController::class, 'store'])->name('anggota.store');
     Route::get('/anggota/{anggota}/edit', [AnggotaController::class, 'edit'])->name('anggota.edit');
@@ -76,55 +80,59 @@ Route::middleware(['auth', 'role:USER|ADMIN'])->group(function () {
     Route::delete('/anggota/{anggota}', [AnggotaController::class, 'destroy'])->name('anggota.destroy');
 
     // Pengumuman
-    Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('pengumuman.index');
-    Route::get('/pengumuman/{id}', [PengumumanController::class, 'show'])->name('pengumuman.show');
-    Route::get('/pengumuman/create', [PengumumanController::class, 'create'])->name('pengumuman.create');
-    Route::post('/pengumuman', [PengumumanController::class, 'store'])->name('pengumuman.store');
-    Route::get('/pengumuman/{id}/edit', [PengumumanController::class, 'edit'])->name('pengumuman.edit');
-    Route::put('/pengumuman/{id}', [PengumumanController::class, 'update'])->name('pengumuman.update');
-    Route::delete('/pengumuman/{id}', [PengumumanController::class, 'destroy'])->name('pengumuman.destroy');
-    
-    //daftar janji temu offline
-    Route::get('/admin/janji-temu-offline', [JanjiTemuOfflineController::class, 'index'])->name('admin.janji_temu_offline.index');
-    Route::post('/admin/janji-temu-offline/{id}/selesai', [JanjiTemuOfflineController::class, 'markAsSelesai'])->name('janji_temu_offline.selesai');
-    Route::post('/admin/janji-temu-offline/{id}/batal', [JanjiTemuOfflineController::class, 'batal'])->name('janji_temu_offline.batal');
+    Route::resource('pengumuman', PengumumanController::class);
+
     // Pendaftaran
     Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran');
-    Route::get('/pendaftaran-offline', [PendaftaranOfflineController::class, 'create'])->name('pendaftaran_offline.create');
-    Route::post('/pendaftaran-offline', [PendaftaranOfflineController::class, 'store'])->name('pendaftaran_offline.store');
 
     // Poli
     Route::resource('poli', PoliController::class);
 });
 
-// ADMIN Routes
-Route::middleware(['auth', 'role:ADMIN'])->group(function () {
-    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-    
-    Route::resource('poli', PoliController::class);
-    Route::resource('pengumuman', PengumumanController::class);
-    Route::get('/admin/poli', [PoliController::class, 'index'])->name('admin.poli.index');
-Route::get('/admin/daftar-janji-temu-offline', [JanjiTemuOfflineController::class, 'index'])->name('admin.janji.offline.index');
 
+// ======================
+// ADMIN Routes
+// ======================
+Route::middleware(['auth', 'role:ADMIN|DOKTER'])->group(function () {
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/poli', [PoliController::class, 'index'])->name('admin.poli.index');
+
+    // Janji Temu Offline (ADMIN)
+    Route::prefix('admin/janji-temu-offline')->name('admin.janji_temu_offline.')->group(function () {
+        Route::get('/', [JanjiTemuOfflineController::class, 'index'])->name('index');
+        Route::post('/{id}/selesai', [JanjiTemuOfflineController::class, 'selesai'])->name('selesai');
+        Route::post('/{id}/batal', [JanjiTemuOfflineController::class, 'batal'])->name('batal');
+        Route::post('/{id}/panggil', [JanjiTemuOfflineController::class, 'panggil'])->name('panggil');
+    });
 });
 
+
+// ======================
 // DOKTER Routes
-Route::middleware(['auth', 'role:DOKTER'])->group(function () {
+// ======================
+Route::middleware(['auth', 'role:DOKTER|ADMIN'])->group(function () {
+    Route::get('/dokter/dashboard', [AdminDashboardController::class, 'index'])->name('dokter.dashboard');
     Route::get('/dokter/janji-temu', [JanjiTemuController::class, 'index'])->name('dokter.janji-temu.index');
     Route::get('/dokter/keluarga', [KeluargaController::class, 'show'])->name('dokter.keluarga.show');
     Route::get('/dokter/poli', [PoliController::class, 'index'])->name('dokter.poli.index');
     Route::get('/dokter/pengumuman', [PengumumanController::class, 'index'])->name('dokter.pengumuman.index');
+
+    // Janji Temu Offline (DOKTER)
+    Route::prefix('dokter/janji-temu-offline')->name('dokter.janji_temu_offline.')->group(function () {
+        Route::get('/', [JanjiTemuOfflineController::class, 'index'])->name('index');
+        Route::post('/{id}/selesai', [JanjiTemuOfflineController::class, 'selesai'])->name('selesai');
+        Route::post('/{id}/batal', [JanjiTemuOfflineController::class, 'batal'])->name('batal');
+        Route::post('/{id}/panggil', [JanjiTemuOfflineController::class, 'panggil'])->name('panggil');
+    });
 });
 
-//USER MANAJEMEN
-    Route::middleware(['auth', 'role:ADMIN'])->group(function () {
-    Route::get('/admin/user-manajemen', [\App\Http\Controllers\UserManajemenController::class, 'create'])->name('admin.usermanajemen');
-    Route::post('/admin/user-manajemen', [\App\Http\Controllers\UserManajemenController::class, 'store'])->name('admin.usermanajemen.store');
-    });
 
-
-//route janjitemuoffline controller
-route::get('/janji-temu-offline', [JanjiTemuOfflineController::class, 'index'])->name('janji_temu_offline.index');
-Route::post('/janji-temu-offline/{id}/panggil', [JanjiTemuOfflineController::class, 'panggil'])->name('janji_temu_offline.panggil');
-Route::post('/janji-temu-offline/{id}/selesai', [JanjiTemuOfflineController::class, 'selesai'])->name('janji_temu_offline.selesai');
-Route::post('/janji-temu-offline/{id}/batal', [JanjiTemuOfflineController::class, 'batal'])->name('janji_temu_offline.batal');
+// ======================
+// USER MANAJEMEN (ADMIN)
+// ======================
+Route::middleware(['auth', 'role:ADMIN'])->group(function () {
+    Route::get('/admin/user-manajemen', [UserManajemenController::class, 'create'])->name('admin.usermanajemen');
+    Route::post('/admin/user-manajemen', [UserManajemenController::class, 'store'])->name('admin.usermanajemen.store');
+    // admin.janji.offline.index
+    Route::get('/admin/user-manajemen/list', [UserManajemenController::class, 'index'])->name('admin.usermanajemen.index');
+});

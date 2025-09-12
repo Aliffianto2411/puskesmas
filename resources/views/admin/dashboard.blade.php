@@ -2,7 +2,8 @@
 
 @section('content')
 <div class="container py-4">
-    <h2><i class="bi bi-speedometer2"></i> Dashboard Admin</h2>
+    <h2><i class="bi bi-speedometer2"></i> Dashboard - Puskesmas Meral
+    </h2>
 
     {{-- Statistik --}}
     <div class="row mb-4">
@@ -24,31 +25,27 @@
             'title' => 'Janji Hari Ini',
             'value' => $janjiHariIni,
             'class' => 'info',
-            'route' => route('admin.janji.offline.index')
+            // 'route' => route('admin.janji.offline.index')
         ],
         [
             'title' => 'Antrian Aktif',
             'value' => $antrianAktif,
             'class' => 'danger',
-            'route' => route('admin.janji.offline.index')
+            // 'route' => route('admin.janji.offline.index')
         ],
     ];
 @endphp
 
 @foreach ($cards as $card)
     <div class="col-md-3">
-        @if ($card['route'])
-            <a href="{{ $card['route'] }}" class="text-decoration-none">
-        @endif
+      
         <div class="card text-white bg-{{ $card['class'] }} mb-3 h-100">
             <div class="card-body text-center">
                 <h5 class="card-title">{{ $card['title'] }}</h5>
                 <p class="fs-4">{{ $card['value'] }}</p>
             </div>
         </div>
-        @if ($card['route'])
-            </a>
-        @endif
+        
     </div>
 @endforeach
     </div>
@@ -166,4 +163,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
 @endsection

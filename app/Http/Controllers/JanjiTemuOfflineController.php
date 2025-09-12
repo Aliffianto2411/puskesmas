@@ -5,56 +5,50 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\JanjiTemu;
 use App\Models\Poli;
+use Carbon\Carbon;
 
 class JanjiTemuOfflineController extends Controller
 {
     public function index(Request $request)
     {
-        $tanggal = $request->input('tanggal');
+        $tanggal = $request->input('tanggal', Carbon::today()->toDateString());
         $nama = $request->input('nama');
         $poliDipilih = $request->input('poli');
 
-        // Ambil semua data poli untuk dropdown
         $polis = Poli::all();
 
-        // Siapkan variabel kosong untuk hasil filter
         $janjiTemuOffline = collect();
-        $janjiTemuOnline = collect();
+        $janjiTemuOnline  = collect();
 
         if ($poliDipilih) {
-            // Query dasar dengan relasi poli dan detail keluarga
             $baseQuery = JanjiTemu::with(['poli', 'detailKeluarga'])
                 ->where('poli_id', $poliDipilih);
 
-            // Filter berdasarkan nama pasien
             if ($nama) {
                 $baseQuery->whereHas('detailKeluarga', function ($q) use ($nama) {
                     $q->where('nama', 'like', '%' . $nama . '%');
                 });
             }
 
-            // Filter berdasarkan tanggal
             if ($tanggal) {
                 $baseQuery->whereDate('tanggal', $tanggal);
             }
 
-            // Clone query untuk memisahkan offline dan online
-            $offlineQuery = (clone $baseQuery)->where('status_pendaftaran', JanjiTemu::STATUS_PENDAFTARAN['Offline']);
-            $onlineQuery  = (clone $baseQuery)->where('status_pendaftaran', JanjiTemu::STATUS_PENDAFTARAN['Online']);
+            $offlineQuery = (clone $baseQuery)->where('status_pendaftaran', 'Offline');
+            $onlineQuery  = (clone $baseQuery)->where('status_pendaftaran', 'Online');
 
-            // Ambil data dan group by tanggal
-            $janjiTemuOffline = $offlineQuery->get()->groupBy('tanggal');
-            $janjiTemuOnline  = $onlineQuery->get()->groupBy('tanggal');
+            $janjiTemuOffline = $offlineQuery->orderBy('created_at', 'asc')->get()->groupBy('tanggal');
+            $janjiTemuOnline  = $onlineQuery->orderBy('jam', 'asc')->get()->groupBy('tanggal');
         }
 
-        return view('admin.daftarjanjitemuoffline', [
-            'polis' => $polis,
-            'poliDipilih' => $poliDipilih,
-            'tanggal' => $tanggal,
-            'nama' => $nama,
-            'janjiTemuOffline' => $janjiTemuOffline,
-            'janjiTemuOnline' => $janjiTemuOnline,
-        ]);
+        return view('admin.daftarjanjitemuoffline', compact(
+            'janjiTemuOffline',
+            'janjiTemuOnline',
+            'polis',
+            'poliDipilih',
+            'tanggal',
+            'nama'
+        ));
     }
 
     public function panggil($id)
@@ -63,7 +57,7 @@ class JanjiTemuOfflineController extends Controller
         $janji->status = 'Diproses';
         $janji->save();
 
-        return back()->with('success', 'Pasien dipanggil dan status diubah menjadi Diproses.');
+        return back()->with('success', 'Pasien sedang dipanggil.');
     }
 
     public function selesai($id)
@@ -72,13 +66,13 @@ class JanjiTemuOfflineController extends Controller
         $janji->status = 'Selesai';
         $janji->save();
 
-        return back()->with('success', 'Janji temu ditandai selesai.');
+        return back()->with('success', 'Janji temu selesai.');
     }
 
     public function batal($id)
     {
         $janji = JanjiTemu::findOrFail($id);
-        $janji->status = 'Batal';
+        $janji->status = 'Dibatalkan';
         $janji->save();
 
         return back()->with('success', 'Janji temu dibatalkan.');

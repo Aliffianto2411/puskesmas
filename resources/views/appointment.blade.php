@@ -219,9 +219,9 @@
     tanggalInput.addEventListener('change', updateAvailableSlots);
 
     // Tampilkan tombol check-in jika waktu janji hampir tiba (dalam 5 menit -10 menit)
-    @if (isset($invoice) && $invoice->status === 'Menunggu')
+    <?php if (isset($invoice) && $invoice->status === 'Menunggu'): ?>
       const checkinButton = document.getElementById('checkin-button');
-      const janjiDateTime = new Date('{{ \Carbon\Carbon::parse($invoice->tanggal . ' ' . $invoice->jam, 'Asia/Jakarta')->toIso8601String() }}');
+      const janjiDateTime = new Date("{{ \Carbon\Carbon::parse($invoice->tanggal . ' ' . $invoice->jam, 'Asia/Jakarta')->toIso8601String() }}");
       const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Jakarta' }));
       const diffInMinutes = (janjiDateTime - now) / 60000;
 
@@ -230,7 +230,7 @@
       } else {
         checkinButton.style.display = 'none';
       }
-    @endif
+    <?php endif; ?>
   });
 </script>
 

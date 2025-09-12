@@ -222,14 +222,8 @@
   <div class="container text-center">
     <p class="mb-1">&copy; {{ date('Y') }} Puskesmas Meral. All rights reserved.</p>
     <p class="small mb-0">
-      Jl. Contoh Alamat No. 123, Meral, Kabupaten Karimun, Kepulauan Riau<br>
-      Telp: (0777) 123456 | Email: puskesmasmeral@email.com
+      Jl. Pelabuhan Parit Rempak , Sei Raya, Meral, Kabupaten Karimun, Kepulauan Riau<br>
     </p>
-    <div class="mt-2">
-      <a href="#" class="text-white me-2"><i class="bi bi-facebook"></i></a>
-      <a href="#" class="text-white me-2"><i class="bi bi-instagram"></i></a>
-      <a href="#" class="text-white"><i class="bi bi-whatsapp"></i></a>
-    </div>
   </div>
 </footer>
 

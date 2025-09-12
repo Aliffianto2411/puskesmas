@@ -38,7 +38,7 @@ class AuthController extends Controller
                 return redirect()->route('admin.dashboard');
             }
             if ($user->hasRole('DOKTER')) {
-                return redirect()->route('dokter.janji-temu.index');
+                return redirect()->route('admin.dashboard');
             }
             if ($user->hasRole('USER')) {
                 return redirect()->route('pendaftaran');
