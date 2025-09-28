@@ -77,14 +77,14 @@
             </div>
 
             <div class="d-grid mt-4">
-              <button type="submit" class="btn btn-primary">Ambil Antrian</button>
+              <button type="submit" class="btn btn-primary">Daftar Poli</button>
             </div>
           </form>
 
           @if (isset($invoice))
           <div class="card mt-4 shadow border-success">
             <div class="card-header bg-success text-white">
-              <h5 class="mb-0">Invoice Antrian Berhasil</h5>
+              <h5 class="mb-0"> Pendaftaran Poli Berhasil</h5>
             </div>
             <div class="card-body">
               <p><strong>Nama Pasien:</strong> {{ $invoice->detailKeluarga->nama ?? '-' }}</p>

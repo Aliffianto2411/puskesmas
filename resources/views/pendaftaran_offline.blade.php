@@ -45,11 +45,11 @@
             </select>
         </div>
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
             <label for="tanggal" class="form-label">Tanggal Janji Temu</label>
             <input type="date" class="form-control" id="tanggal" name="tanggal"
                    value="{{ $tanggal ?? date('Y-m-d') }}" required>
-        </div>
+        </div> -->
 
         <button type="submit" class="btn btn-primary">Daftar</button>
     </form>

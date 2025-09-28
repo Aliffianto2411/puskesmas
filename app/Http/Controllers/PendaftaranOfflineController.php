@@ -14,9 +14,9 @@ class PendaftaranOfflineController extends Controller
         $poli = Poli::all();
 
         $poli_id = $request->query('poli_id') ?? old('poli_id');
-        $tanggal = $request->query('tanggal') ?? old('tanggal');
+        // tanggal tidak perlu diambil dari input, otomatis hari ini
+        $tanggal = now()->toDateString();
 
-        // Tidak perlu lagi generate jam karena janji temu offline tidak pakai jam
         return view('pendaftaran_offline', compact('poli', 'poli_id', 'tanggal'));
     }
 
@@ -26,11 +26,13 @@ class PendaftaranOfflineController extends Controller
             'no_kk' => 'required',
             'detail_keluarga_id' => 'required|exists:detail_keluargas,id',
             'poli_id' => 'required|exists:poli,id',
-            'tanggal' => 'required|date',
+            // 'tanggal' dihapus karena tidak lagi diinput user
         ]);
 
-        // Cegah pasien daftar lebih dari 1x di tanggal dan poli yang sama (tanpa jam)
-        $existingJanji = JanjiTemu::where('tanggal', $request->tanggal)
+        $tanggalHariIni = now()->toDateString();
+
+        // Cegah pasien daftar lebih dari 1x di tanggal dan poli yang sama
+        $existingJanji = JanjiTemu::where('tanggal', $tanggalHariIni)
             ->where('poli_id', $request->poli_id)
             ->where('detail_keluarga_id', $request->detail_keluarga_id)
             ->exists();
@@ -41,12 +43,12 @@ class PendaftaranOfflineController extends Controller
                 ->withInput();
         }
 
-        // Simpan janji temu tanpa jam
+        // Simpan janji temu dengan tanggal = hari ini
         JanjiTemu::create([
             'user_id' => null,
             'poli_id' => $request->poli_id,
-            'tanggal' => $request->tanggal,
-            'jam' => null, // tetap diset null jika kolom jam masih ada di database
+            'tanggal' => $tanggalHariIni,
+            'jam' => null,
             'detail_keluarga_id' => $request->detail_keluarga_id,
             'status' => JanjiTemu::STATUS['Menunggu'],
             'status_pendaftaran' => JanjiTemu::STATUS_PENDAFTARAN['Offline'],

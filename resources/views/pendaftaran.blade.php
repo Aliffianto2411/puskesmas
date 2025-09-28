@@ -10,7 +10,7 @@
   <!-- Invoice Janji Temu Aktif -->
   <div class="card shadow-sm mb-4">
     <div class="card-body">
-      <h5 class="card-title">Invoice Janji Temu Aktif</h5>
+      <h5 class="card-title">Janji Temu Aktif</h5>
 
       @if($activeInvoices->count() > 0)
         @foreach($activeInvoices as $invoice)
@@ -47,49 +47,12 @@
           </div>
         @endforeach
       @else
-        <p>Tidak ada invoice janji temu aktif.</p>
+        <p>Tidak ada janji temu aktif.</p>
       @endif
     </div>
   </div>
 
 
-  
-
-  <!-- Riwayat Antrian -->
-  <div class="card shadow-sm mb-4">
-    <div class="card-body">
-      <h5 class="card-title">Riwayat Antrian Terakhir</h5>
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>Tanggal</th>
-            <th>Poli</th>
-            <th>Nomor</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          @foreach($riwayatAntrian as $riwayat)
-          <tr>
-            <td>{{ $riwayat['tanggal'] }}</td>
-            <td>{{ $riwayat['poli'] }}</td>
-            <td>{{ $riwayat['nomor'] }}</td>
-            <td>
-              @php
-                $statusClass = match($riwayat['status']) {
-                  'Selesai' => 'bg-success',
-                  'Batal' => 'bg-danger',
-                  default => 'bg-secondary'
-                };
-              @endphp
-              <span class="badge {{ $statusClass }}">{{ $riwayat['status'] }}</span>
-            </td>
-          </tr>
-          @endforeach
-        </tbody>
-      </table>
-    </div>
-  </div>
 
   <!-- Pengumuman -->
  <div class="card shadow-sm">

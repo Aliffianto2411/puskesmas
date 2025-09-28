@@ -11,7 +11,7 @@
         <h1 class="display-4 fw-bold">Selamat Datang di Puskesmas Meral</h1>
         <p class="lead">Menjadi  Puskemas yang unggul untuk Mewujudkan Masyarakat sehat  yang Mandiri dan Berkeadilan</p>
         <a href="{{ url('/login') }}" class="btn btn-light btn-lg text-success">
-         Buat Janji Temu
+         Daftar
         </a>
       </div>
       <!-- Kanan: Gambar -->
