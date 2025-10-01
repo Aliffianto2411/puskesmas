@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Models;   // <-- JANGAN salah
+namespace App\Models;   
+
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Keluarga;
 
 class DetailKeluarga extends Model
 {
